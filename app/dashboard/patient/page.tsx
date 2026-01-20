@@ -115,7 +115,7 @@ export default function PatientDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-100/30 via-cyan-100/20 to-emerald-50/40" style={{background: 'linear-gradient(135deg, #d1f2eb 0%, #d0f0ef 25%, #c8ebe9 50%, #bfe5e3 75%, #b8e0dd 100%)'}}>
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 h-full w-64 bg-white shadow-2xl transform -translate-x-full lg:translate-x-0 transition-transform z-50">
         <div className="p-6 border-b border-gray-200">
@@ -189,49 +189,73 @@ export default function PatientDashboard() {
             <p className="text-gray-600">Signed up with {email}</p>
           </div>
 
-          {/* Health Matrix - Enhanced Interactive Cards */}
+          {/* Health Matrix - Enhanced Glassmorphism Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Physical Health Card - Animated Circular Progress */}
+            {/* Physical Health Card - Frosted Glass Aesthetic */}
             <div 
               onMouseEnter={() => setShowPhysicalBreakdown(true)}
               onMouseLeave={() => setShowPhysicalBreakdown(false)}
-              className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer relative overflow-hidden group"
+              className="rounded-3xl p-8 transition-all duration-500 transform hover:-translate-y-1 cursor-pointer relative overflow-hidden group"
+              style={{
+                background: 'rgba(255, 255, 255, 0.25)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1.5px solid',
+                borderImage: 'linear-gradient(135deg, rgba(20, 184, 166, 0.4), rgba(13, 148, 136, 0.2)) 1',
+                boxShadow: '0 12px 40px rgba(20, 184, 166, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+              }}
             >
-              {/* Heartbeat pulse animation */}
-              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 animate-pulse"></div>
+              {/* Subtle hover blur increase */}
+              <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                }}
+              ></div>
               
-              <div className="flex flex-col items-center text-white relative z-10">
-                {/* Breathing heart icon */}
-                <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-6 animate-[pulse_2s_ease-in-out_infinite]">
-                  <svg className="w-12 h-12 animate-[pulse_1.5s_ease-in-out_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+              <div className="flex flex-col items-center relative z-10">
+                {/* Minimal circular icon outline */}
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-105" 
+                  style={{border: '1.5px solid rgba(20, 184, 166, 0.35)'}}
+                >
+                  <svg className="w-6 h-6 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                   </svg>
                 </div>
                 
-                <h3 className="text-3xl font-bold mb-4">Physical Health</h3>
+                <h3 className="text-2xl font-bold mb-4 text-teal-800" style={{fontFamily: 'Georgia, serif', fontStyle: 'italic'}}>Physical Health</h3>
                 
-                {/* Animated circular progress ring */}
-                <div className="relative w-32 h-32 mb-4">
+                {/* Refined circular progress ring with gradient */}
+                <div className="relative w-32 h-32 mb-5">
                   <svg className="transform -rotate-90 w-32 h-32">
-                    <circle cx="64" cy="64" r="56" stroke="rgba(255,255,255,0.2)" strokeWidth="8" fill="none" />
+                    <circle cx="64" cy="64" r="56" stroke="rgba(20, 184, 166, 0.15)" strokeWidth="5" fill="none" />
                     <circle 
                       cx="64" cy="64" r="56" 
-                      stroke="white" 
-                      strokeWidth="8" 
+                      stroke="url(#physicalGradient)" 
+                      strokeWidth="5" 
                       fill="none"
                       strokeDasharray="351.86"
                       strokeDashoffset="76.5"
-                      className="transition-all duration-1000 ease-out animate-[pulse_2s_ease-in-out_infinite]"
+                      className="transition-all duration-1000 ease-out"
                       strokeLinecap="round"
                     />
+                    <defs>
+                      <linearGradient id="physicalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style={{stopColor: '#14b8a6', stopOpacity: 1}} />
+                        <stop offset="100%" style={{stopColor: '#0d9488', stopOpacity: 0.85}} />
+                      </linearGradient>
+                    </defs>
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-4xl font-bold">78.2%</span>
+                    <span className="text-3xl font-semibold text-teal-800">78.2%</span>
                   </div>
                 </div>
                 
-                <p className="text-sm opacity-90 mb-4">Excellent condition</p>
-                <p className="text-xs opacity-75 italic">Your physical health is improving steadily over the past 7 days</p>
+                <p className="text-sm text-teal-700 mb-2 font-semibold">Excellent condition</p>
+                <p className="text-xs text-slate-600 italic">Steady improvement over 7 days</p>
                 
                 {/* Mini breakdown overlay on hover */}
                 {showPhysicalBreakdown && (
@@ -320,30 +344,48 @@ export default function PatientDashboard() {
               </div>
             </div>
 
-            {/* Mental Health Card - Wave Progress Animation */}
+            {/* Mental Health Card - Frosted Glass with Wave Animation */}
             <div 
               onClick={() => setShowMentalPanel(!showMentalPanel)}
-              className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer relative overflow-hidden group"
+              className="rounded-3xl p-8 transition-all duration-500 transform hover:-translate-y-1 cursor-pointer relative overflow-hidden group"
+              style={{
+                background: 'rgba(255, 255, 255, 0.25)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1.5px solid',
+                borderImage: 'linear-gradient(135deg, rgba(20, 184, 166, 0.35), rgba(6, 182, 212, 0.2)) 1',
+                boxShadow: '0 12px 40px rgba(6, 182, 212, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+              }}
             >
               {/* Calm glow effect on hover */}
-              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-xl"></div>
+              <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                }}
+              ></div>
               
-              <div className="flex flex-col items-center text-white relative z-10">
-                <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-6">
-                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              <div className="flex flex-col items-center relative z-10">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-105" 
+                  style={{border: '1.5px solid rgba(6, 182, 212, 0.35)'}}
+                >
+                  <svg className="w-6 h-6 text-cyan-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                   </svg>
                 </div>
                 
-                <h3 className="text-3xl font-bold mb-4">Mental Health</h3>
+                <h3 className="text-2xl font-bold mb-4 text-cyan-800" style={{fontFamily: 'Georgia, serif', fontStyle: 'italic'}}>Mental Health</h3>
                 
-                {/* Wave-style progress */}
-                <div className="relative w-full h-24 mb-4">
+                {/* Wave-style progress with teal gradient */}
+                <div className="relative w-full h-28 mb-5">
                   <svg viewBox="0 0 200 100" className="w-full h-full">
                     <defs>
                       <linearGradient id="waveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="rgba(255,255,255,0.8)" />
-                        <stop offset="100%" stopColor="rgba(255,255,255,0.2)" />
+                        <stop offset="0%" stopColor="rgba(6, 182, 212, 0.7)" />
+                        <stop offset="100%" stopColor="rgba(20, 184, 166, 0.3)" />
                       </linearGradient>
                     </defs>
                     <path
@@ -353,12 +395,12 @@ export default function PatientDashboard() {
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-5xl font-bold">90.8%</span>
+                    <span className="text-4xl font-semibold text-cyan-800">90.8%</span>
                   </div>
                 </div>
                 
-                <p className="text-sm opacity-90 mb-2">Very good state</p>
-                <p className="text-xs opacity-75 italic">Your emotional balance is consistently strong</p>
+                <p className="text-sm text-cyan-700 mb-2 font-semibold">Very good state</p>
+                <p className="text-xs text-slate-600 italic">Emotional balance consistently strong</p>
               </div>
               
               {/* Slide-up mental health panel */}
@@ -414,98 +456,118 @@ export default function PatientDashboard() {
               )}
             </div>
 
-            {/* Overall Wellness Card - Multi-layered Progress Ring */}
+            {/* Overall Wellness Card - Frosted Glass with Multi-layered Rings */}
             <div 
               onMouseEnter={() => setShowWellnessLayers(true)}
               onMouseLeave={() => setShowWellnessLayers(false)}
-              className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer relative overflow-hidden"
+              className="rounded-3xl p-8 transition-all duration-500 transform hover:-translate-y-1 cursor-pointer relative overflow-hidden group"
+              style={{
+                background: 'rgba(255, 255, 255, 0.25)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1.5px solid',
+                borderImage: 'linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(20, 184, 166, 0.2)) 1',
+                boxShadow: '0 12px 40px rgba(16, 185, 129, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+              }}
             >
-              <div className="flex flex-col items-center text-white">
-                <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-6">
-                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                }}
+              ></div>
+              
+              <div className="flex flex-col items-center relative z-10">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-105" 
+                  style={{border: '1.5px solid rgba(16, 185, 129, 0.35)'}}
+                >
+                  <svg className="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                   </svg>
                 </div>
                 
-                <h3 className="text-3xl font-bold mb-4">Overall Wellness</h3>
+                <h3 className="text-2xl font-bold mb-4 text-emerald-800" style={{fontFamily: 'Georgia, serif', fontStyle: 'italic'}}>Overall Wellness</h3>
                 
-                {/* Multi-layered progress rings */}
-                <div className="relative w-40 h-40 mb-4">
+                {/* Multi-layered progress rings with teal/emerald gradient */}
+                <div className="relative w-40 h-40 mb-5">
                   {/* Outer ring - Physical (teal) */}
                   <svg className="absolute inset-0 transform -rotate-90 w-40 h-40">
-                    <circle cx="80" cy="80" r="70" stroke="rgba(255,255,255,0.2)" strokeWidth="6" fill="none" />
+                    <circle cx="80" cy="80" r="70" stroke="rgba(20, 184, 166, 0.15)" strokeWidth="5" fill="none" />
                     <circle 
                       cx="80" cy="80" r="70" 
                       stroke="#14b8a6" 
-                      strokeWidth="6" 
+                      strokeWidth="5" 
                       fill="none"
                       strokeDasharray="439.82"
                       strokeDashoffset="95.76"
-                      className={`transition-all duration-1000 ${showWellnessLayers ? 'opacity-100' : 'opacity-50'}`}
+                      className={`transition-all duration-1000 ${showWellnessLayers ? 'opacity-90' : 'opacity-70'}`}
                       strokeLinecap="round"
                     />
                   </svg>
                   
-                  {/* Middle ring - Mental (indigo) */}
+                  {/* Middle ring - Mental (cyan) */}
                   <svg className="absolute inset-0 transform -rotate-90 w-40 h-40">
-                    <circle cx="80" cy="80" r="58" stroke="rgba(255,255,255,0.2)" strokeWidth="6" fill="none" />
+                    <circle cx="80" cy="80" r="58" stroke="rgba(6, 182, 212, 0.15)" strokeWidth="5" fill="none" />
                     <circle 
                       cx="80" cy="80" r="58" 
-                      stroke="#6366f1" 
-                      strokeWidth="6" 
+                      stroke="#06b6d4" 
+                      strokeWidth="5" 
                       fill="none"
                       strokeDasharray="364.42"
                       strokeDashoffset="33.53"
-                      className={`transition-all duration-1000 ${showWellnessLayers ? 'opacity-100' : 'opacity-50'}`}
+                      className={`transition-all duration-1000 ${showWellnessLayers ? 'opacity-90' : 'opacity-70'}`}
                       strokeLinecap="round"
                     />
                   </svg>
                   
-                  {/* Inner ring - Lifestyle (pink) */}
+                  {/* Inner ring - Lifestyle (emerald) */}
                   <svg className="absolute inset-0 transform -rotate-90 w-40 h-40">
-                    <circle cx="80" cy="80" r="46" stroke="rgba(255,255,255,0.2)" strokeWidth="6" fill="none" />
+                    <circle cx="80" cy="80" r="46" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="5" fill="none" />
                     <circle 
                       cx="80" cy="80" r="46" 
-                      stroke="#ec4899" 
-                      strokeWidth="6" 
+                      stroke="#10b981" 
+                      strokeWidth="5" 
                       fill="none"
                       strokeDasharray="289.03"
                       strokeDashoffset="57.81"
-                      className={`transition-all duration-1000 ${showWellnessLayers ? 'opacity-100' : 'opacity-50'}`}
+                      className={`transition-all duration-1000 ${showWellnessLayers ? 'opacity-90' : 'opacity-70'}`}
                       strokeLinecap="round"
                     />
                   </svg>
                   
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
-                      <span className="text-4xl font-bold">84.5%</span>
+                      <span className="text-4xl font-semibold text-emerald-800">84.5%</span>
                       {showWellnessLayers && (
                         <div className="text-xs mt-1">
-                          <p className="text-teal-200">↑ +2.3%</p>
+                          <p className="text-teal-600 font-semibold">↑ +2.3%</p>
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
                 
-                <p className="text-sm opacity-90 mb-2">Great progress!</p>
-                <p className="text-xs opacity-75 italic text-center px-2">Strong balance between activity and rest</p>
+                <p className="text-sm text-emerald-700 mb-2 font-semibold">Great progress!</p>
+                <p className="text-xs text-slate-600 italic text-center px-2">Strong balance between activity and rest</p>
                 
                 {showWellnessLayers && (
                   <div className="mt-4 space-y-2 text-xs w-full">
-                    <div className="flex items-center justify-between bg-white bg-opacity-20 rounded-lg p-2">
+                    <div className="flex items-center justify-between rounded-lg p-2" style={{background: 'rgba(20, 184, 166, 0.15)'}}>
                       <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-teal-400 rounded-full"></div>
-                        <span>Physical</span>
+                        <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+                        <span className="text-teal-800 font-medium">Physical</span>
                       </div>
-                      <span className="font-bold">78.2%</span>
+                      <span className="font-bold text-teal-800">78.2%</span>
                     </div>
-                    <div className="flex items-center justify-between bg-white bg-opacity-20 rounded-lg p-2">
+                    <div className="flex items-center justify-between rounded-lg p-2" style={{background: 'rgba(6, 182, 212, 0.15)'}}>
                       <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-indigo-400 rounded-full"></div>
-                        <span>Mental</span>
+                        <div className="w-3 h-3 bg-cyan-500 rounded-full"></div>
+                        <span className="text-cyan-800 font-medium">Mental</span>
                       </div>
-                      <span className="font-bold">90.8%</span>
+                      <span className="font-bold text-cyan-800">90.8%</span>
                     </div>
                     <div className="flex items-center justify-between bg-white bg-opacity-20 rounded-lg p-2">
                       <div className="flex items-center gap-2">
@@ -624,47 +686,72 @@ export default function PatientDashboard() {
 
           {/* Quick Actions - Enhanced SOS and Medicine Matrix */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* SOS Emergency - Enhanced with Pulse and Emergency Actions */}
+            {/* SOS Emergency - Frosted Glass with Subtle Red Tint */}
             <div 
-              className="bg-gradient-to-br from-red-500 to-red-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all cursor-pointer transform hover:scale-105 relative overflow-hidden group"
+              className="rounded-3xl p-8 transition-all duration-500 transform hover:-translate-y-1 cursor-pointer relative overflow-hidden group"
               onClick={(e) => {
                 if (!(e.target as HTMLElement).closest('button')) {
                   callSOS();
                 }
               }}
+              style={{
+                background: 'rgba(255, 245, 245, 0.4)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1.5px solid rgba(239, 68, 68, 0.3)',
+                boxShadow: '0 12px 40px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.7)',
+              }}
             >
-              {/* Rhythmic red pulse animation */}
-              <div className="absolute inset-0 bg-red-400 opacity-0 group-hover:opacity-30 animate-[pulse_2s_ease-in-out_infinite]"></div>
+              {/* Subtle pulse on hover */}
+              <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
+                style={{
+                  background: 'rgba(254, 226, 226, 0.3)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                }}
+              ></div>
               
-              <div className="flex flex-col items-center text-white relative z-10">
-                <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-4 animate-[heartbeat_1.5s_ease-in-out_infinite]">
-                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              <div className="flex flex-col items-center relative z-10">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-105" 
+                  style={{border: '1.5px solid rgba(239, 68, 68, 0.4)'}}
+                >
+                  <svg className="w-6 h-6 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                   </svg>
                 </div>
-                <h3 className="text-3xl font-bold mb-2">SOS Emergency</h3>
-                <p className="text-lg opacity-90 mb-4">24/7 Emergency Helpline</p>
-                <p className="text-xs opacity-80 mb-4 italic">Instant help, no AI delay</p>
+                <h3 className="text-2xl font-bold mb-2 text-red-800" style={{fontFamily: 'Georgia, serif', fontStyle: 'italic'}}>SOS Emergency</h3>
+                <p className="text-base text-red-700 mb-3 font-semibold">24/7 Emergency Helpline</p>
+                <p className="text-xs text-slate-600 mb-4 italic">Instant help, no AI delay</p>
 
-                {/* Emergency Action Buttons */}
+                {/* Emergency Action Buttons with refined styling */}
                 <div className="w-full space-y-3 mt-2">
                   <a 
                     href="tel:108"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex items-center justify-center gap-3 w-full bg-white bg-opacity-20 hover:bg-opacity-30 py-3 px-4 rounded-xl font-semibold text-lg transition-all"
+                    className="flex items-center justify-center gap-3 w-full py-3 px-4 rounded-xl font-semibold text-base transition-all text-red-800 hover:text-red-900"
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      border: '1px solid rgba(239, 68, 68, 0.25)',
+                    }}
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                     </svg>
                     Call 108 Ambulance
                   </a>
                   <a 
                     href="tel:102"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex items-center justify-center gap-3 w-full bg-white bg-opacity-20 hover:bg-opacity-30 py-3 px-4 rounded-xl font-semibold text-lg transition-all"
+                    className="flex items-center justify-center gap-3 w-full py-3 px-4 rounded-xl font-semibold text-base transition-all text-red-800 hover:text-red-900"
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      border: '1px solid rgba(239, 68, 68, 0.25)',
+                    }}
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                     </svg>
                     Call 102 Medical
                   </a>
@@ -682,11 +769,15 @@ export default function PatientDashboard() {
                         });
                       }
                     }}
-                    className="flex items-center justify-center gap-3 w-full bg-white bg-opacity-20 hover:bg-opacity-30 py-3 px-4 rounded-xl font-semibold text-lg transition-all"
+                    className="flex items-center justify-center gap-3 w-full py-3 px-4 rounded-xl font-semibold text-base transition-all text-red-800 hover:text-red-900"
+                    style={{
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      border: '1px solid rgba(239, 68, 68, 0.25)',
+                    }}
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                     Share Live Location
                   </button>
@@ -694,27 +785,46 @@ export default function PatientDashboard() {
               </div>
             </div>
 
-            {/* Medicine Matrix - Interactive Search */}
+            {/* Medicine Matrix - Frosted Glass with Emerald Tint */}
             <div 
-              className="bg-gradient-to-br from-green-500 to-green-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all cursor-pointer relative overflow-hidden group"
+              className="rounded-3xl p-8 transition-all duration-500 transform hover:-translate-y-1 cursor-pointer relative overflow-hidden group"
               onClick={() => !showMedicineSearch && setShowMedicineSearch(true)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.25)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1.5px solid rgba(16, 185, 129, 0.35)',
+                boxShadow: '0 12px 40px rgba(16, 185, 129, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+              }}
             >
-              <div className="flex flex-col items-center text-white relative z-10">
-                <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-4">
-                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+              <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                }}
+              ></div>
+              
+              <div className="flex flex-col items-center relative z-10">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-105" 
+                  style={{border: '1.5px solid rgba(16, 185, 129, 0.35)'}}
+                >
+                  <svg className="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                   </svg>
                 </div>
-                <h3 className="text-3xl font-bold mb-2">Medicine Matrix</h3>
-                <p className="text-lg opacity-90 mb-4">Find nearby pharmacies</p>
+                <h3 className="text-2xl font-bold mb-2 text-emerald-800" style={{fontFamily: 'Georgia, serif', fontStyle: 'italic'}}>Medicine Matrix</h3>
+                <p className="text-base text-emerald-700 mb-4 font-semibold">Find nearby pharmacies</p>
                 
                 {!showMedicineSearch ? (
                   <>
                     <div className="flex gap-2 mb-4 flex-wrap justify-center">
-                      <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-xs">Nearest Pharmacy</span>
-                      <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-xs">Repeat Last Medicine</span>
+                      <span className="px-3 py-1 rounded-full text-xs font-medium text-emerald-700" style={{background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.25)'}}>Nearest Pharmacy</span>
+                      <span className="px-3 py-1 rounded-full text-xs font-medium text-emerald-700" style={{background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.25)'}}>Repeat Last</span>
                     </div>
-                    <div className="text-sm font-semibold bg-white bg-opacity-20 px-4 py-2 rounded-full hover:bg-opacity-30 transition-all">Search Medicines →</div>
+                    <div className="text-sm font-semibold px-4 py-2 rounded-full transition-all text-emerald-800" style={{background: 'rgba(16, 185, 129, 0.2)', border: '1px solid rgba(16, 185, 129, 0.3)'}}>Search Medicines →</div>
                   </>
                 ) : (
                   <div className="w-full space-y-4 animate-[slideDown_0.3s_ease-out]">
@@ -800,16 +910,26 @@ export default function PatientDashboard() {
             }
           `}</style>
 
-          {/* Doctor Appointment Section */}
-          <div className="bg-white rounded-3xl p-8 shadow-xl">
+          {/* Doctor Appointment Section - Frosted Glass Card */}
+          <div className="rounded-3xl p-8 transition-all duration-300" style={{
+            background: 'rgba(255, 255, 255, 0.35)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid rgba(20, 184, 166, 0.25)',
+            boxShadow: '0 12px 40px rgba(20, 184, 166, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+          }}>
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-3xl font-bold text-gray-800">Book Doctor Appointment</h2>
-                <p className="text-gray-600 mt-1">Consult with certified doctors and specialists</p>
+                <h2 className="text-3xl font-bold text-teal-800" style={{fontFamily: 'Georgia, serif', fontStyle: 'italic'}}>Book Doctor Appointment</h2>
+                <p className="text-slate-600 mt-1">Consult with certified doctors and specialists</p>
               </div>
               <button 
                 onClick={() => router.push('/appointments/book')}
-                className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+                className="px-6 py-3 rounded-xl font-semibold transition-all text-teal-800 hover:text-teal-900"
+                style={{
+                  background: 'rgba(20, 184, 166, 0.15)',
+                  border: '1px solid rgba(20, 184, 166, 0.3)',
+                }}
               >
                 Book Now
               </button>
@@ -952,23 +1072,33 @@ export default function PatientDashboard() {
             )}
           </div>
 
-          {/* AI Chatbot Section */}
-          <div className="bg-white rounded-3xl p-8 shadow-xl">
+          {/* AI Chatbot Section - Frosted Glass Card */}
+          <div className="rounded-3xl p-8 transition-all duration-300" style={{
+            background: 'rgba(255, 255, 255, 0.35)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid rgba(6, 182, 212, 0.25)',
+            boxShadow: '0 12px 40px rgba(6, 182, 212, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+          }}>
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-teal-400 to-blue-500 rounded-full flex items-center justify-center">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{border: '1.5px solid rgba(6, 182, 212, 0.35)'}}>
+                  <svg className="w-7 h-7 text-cyan-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-800">AI Health Assistant</h2>
-                  <p className="text-gray-600">24/7 Medical Support</p>
+                  <h2 className="text-3xl font-bold text-cyan-800" style={{fontFamily: 'Georgia, serif', fontStyle: 'italic'}}>AI Health Assistant</h2>
+                  <p className="text-slate-600">24/7 Medical Support</p>
                 </div>
               </div>
               <button 
                 onClick={() => router.push('/chat/assistant')}
-                className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
+                className="px-6 py-3 rounded-xl font-semibold transition-all text-cyan-800 hover:text-cyan-900"
+                style={{
+                  background: 'rgba(6, 182, 212, 0.15)',
+                  border: '1px solid rgba(6, 182, 212, 0.3)',
+                }}
               >
                 Start Chat
               </button>
