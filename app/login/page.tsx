@@ -28,11 +28,11 @@ export default function LoginPage() {
   const handleSignUp = () => {
     const savedRole = localStorage.getItem('selectedRole') || 'User'
     if (savedRole === 'User') {
-      router.push('/patient-registration')
+      router.push('/signup/patient')
     } else if (savedRole === 'Doctor') {
-      router.push('/doctor-registration')
+      router.push('/signup/doctor')
     } else {
-      router.push('/ngo-registration')
+      router.push('/signup/ngo')
     }
   }
 
