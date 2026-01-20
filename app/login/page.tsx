@@ -21,7 +21,22 @@ export default function LoginPage() {
     if (email && password) {
       localStorage.setItem('isLoggedIn', 'true')
       localStorage.setItem('userEmail', email)
-      router.push('/dashboard')
+      
+      // Get or set default role
+      let savedRole = localStorage.getItem('selectedRole')
+      if (!savedRole) {
+        savedRole = 'User'
+        localStorage.setItem('selectedRole', 'User')
+      }
+      
+      // Redirect based on role
+      if (savedRole === 'Doctor') {
+        router.push('/dashboard/doctor')
+      } else if (savedRole === 'NGO') {
+        router.push('/dashboard/ngo')
+      } else {
+        router.push('/dashboard/patient')
+      }
     }
   }
 

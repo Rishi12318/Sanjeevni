@@ -16,10 +16,19 @@ export default function PatientDashboard() {
   const router = useRouter();
   const [greeting, setGreeting] = useState('Welcome');
   const [email, setEmail] = useState('');
+  const [selectedMetric, setSelectedMetric] = useState<HealthMetric | null>(null);
   const [expandedMetric, setExpandedMetric] = useState<string | null>(null);
   const [showMedicineSearch, setShowMedicineSearch] = useState(false);
   const [medicineQuery, setMedicineQuery] = useState('');
   const [showMoodCheckIn, setShowMoodCheckIn] = useState(false);
+  const [showPhysicalBreakdown, setShowPhysicalBreakdown] = useState(false);
+  const [showMentalPanel, setShowMentalPanel] = useState(false);
+  const [showWellnessLayers, setShowWellnessLayers] = useState(false);
+  const [expandPhysicalTrend, setExpandPhysicalTrend] = useState(false);
+  const [showDoctors, setShowDoctors] = useState(false);
+  const [showChatbot, setShowChatbot] = useState(false);
+  const [chatMessages, setChatMessages] = useState<Array<{text: string, sender: 'user' | 'bot'}>>([]);
+  const [chatInput, setChatInput] = useState('');
 
   const healthMetrics: HealthMetric[] = [
     {
@@ -63,10 +72,20 @@ export default function PatientDashboard() {
   useEffect(() => {
     // Check authentication
     const userEmail = localStorage.getItem('userEmail');
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
     const selectedRole = localStorage.getItem('selectedRole');
     
-    if (!userEmail || selectedRole !== 'User') {
+    if (!userEmail || !isLoggedIn) {
       router.push('/login');
+      return;
+    }
+    
+    // Redirect if wrong role
+    if (selectedRole === 'Doctor') {
+      router.push('/dashboard/doctor');
+      return;
+    } else if (selectedRole === 'NGO') {
+      router.push('/dashboard/ngo');
       return;
     }
 
