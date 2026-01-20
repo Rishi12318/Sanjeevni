@@ -7,6 +7,10 @@ export default function DoctorDashboard() {
   const router = useRouter();
   const [greeting, setGreeting] = useState('Welcome');
   const [email, setEmail] = useState('');
+  const [showPatients, setShowPatients] = useState(false);
+  const [showAppointments, setShowAppointments] = useState(false);
+  const [showConsultations, setShowConsultations] = useState(false);
+  const [showPrescriptions, setShowPrescriptions] = useState(false);
 
   useEffect(() => {
     // Check authentication
@@ -34,45 +38,45 @@ export default function DoctorDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-50">
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 h-full w-64 bg-white shadow-2xl transform -translate-x-full lg:translate-x-0 transition-transform z-50">
         <div className="p-6 border-b border-gray-200">
-          <h1 className="text-2xl font-bold text-blue-600">🏥 SanjeevniAI</h1>
+          <h1 className="text-2xl font-bold text-teal-600">🏥 SanjeevniAI</h1>
           <p className="text-sm text-gray-600 mt-1">Doctor Portal</p>
         </div>
 
         <nav className="p-4 space-y-2">
-          <a href="/dashboard/doctor" className="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-600 rounded-xl font-medium">
+          <a href="/dashboard/doctor" className="flex items-center gap-3 px-4 py-3 bg-teal-50 text-teal-600 rounded-xl font-medium">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
             Dashboard
           </a>
-          <div className="flex items-center gap-3 px-4 py-3 text-gray-400 rounded-xl font-medium cursor-not-allowed">
+          <button onClick={() => setShowPatients(!showPatients)} className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors w-full">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
             </svg>
-            My Patients (Coming Soon)
-          </div>
-          <div className="flex items-center gap-3 px-4 py-3 text-gray-400 rounded-xl font-medium cursor-not-allowed">
+            My Patients
+          </button>
+          <button onClick={() => setShowAppointments(!showAppointments)} className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors w-full">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
-            Appointments (Coming Soon)
-          </div>
-          <div className="flex items-center gap-3 px-4 py-3 text-gray-400 rounded-xl font-medium cursor-not-allowed">
+            Appointments
+          </button>
+          <button onClick={() => setShowConsultations(!showConsultations)} className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors w-full">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            Consultations (Coming Soon)
-          </div>
-          <div className="flex items-center gap-3 px-4 py-3 text-gray-400 rounded-xl font-medium cursor-not-allowed">
+            Consultations
+          </button>
+          <button onClick={() => setShowPrescriptions(!showPrescriptions)} className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors w-full">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            Prescriptions (Coming Soon)
-          </div>
+            Prescriptions
+          </button>
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
@@ -117,7 +121,7 @@ export default function DoctorDashboard() {
           {/* Statistics */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Total Patients */}
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl p-6 shadow-xl text-white">
+            <div className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl p-6 shadow-xl text-white">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-white bg-opacity-30 rounded-full flex items-center justify-center">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -261,6 +265,199 @@ export default function DoctorDashboard() {
               <p className="text-gray-600 text-sm">View medical records & reports</p>
             </div>
           </div>
+
+          {/* My Patients Section */}
+          {showPatients && (
+            <div className="bg-white rounded-3xl p-8 shadow-xl">
+              <h2 className="text-3xl font-bold text-gray-800 mb-6">My Patients</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  { name: 'Rajesh Sharma', age: 45, condition: 'Hypertension', lastVisit: '15 Jan 2026', status: 'Stable' },
+                  { name: 'Priya Kumar', age: 32, condition: 'Diabetes Type 2', lastVisit: '18 Jan 2026', status: 'Monitoring' },
+                  { name: 'Amit Verma', age: 55, condition: 'Heart Disease', lastVisit: '10 Jan 2026', status: 'Critical' },
+                  { name: 'Sunita Patel', age: 28, condition: 'Asthma', lastVisit: '19 Jan 2026', status: 'Stable' },
+                  { name: 'Rahul Singh', age: 38, condition: 'Migraine', lastVisit: '17 Jan 2026', status: 'Improving' },
+                  { name: 'Anjali Gupta', age: 42, condition: 'Thyroid', lastVisit: '16 Jan 2026', status: 'Stable' }
+                ].map((patient, idx) => (
+                  <div key={idx} className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-6 border border-teal-100 hover:shadow-lg transition-all">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-14 h-14 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                        {patient.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <span className={`text-xs px-3 py-1 rounded-full font-semibold ${
+                        patient.status === 'Stable' ? 'bg-green-100 text-green-600' :
+                        patient.status === 'Critical' ? 'bg-red-100 text-red-600' :
+                        patient.status === 'Monitoring' ? 'bg-yellow-100 text-yellow-600' :
+                        'bg-blue-100 text-blue-600'
+                      }`}>
+                        {patient.status}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-800 mb-1">{patient.name}</h3>
+                    <p className="text-sm text-gray-600 mb-3">Age: {patient.age} • {patient.condition}</p>
+                    <p className="text-xs text-gray-500 mb-4">Last Visit: {patient.lastVisit}</p>
+                    <button className="w-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white py-2 rounded-xl text-sm font-semibold hover:shadow-lg transition-all">
+                      View Details
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Appointments Section */}
+          {showAppointments && (
+            <div className="bg-white rounded-3xl p-8 shadow-xl">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-3xl font-bold text-gray-800">All Appointments</h2>
+                <button className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                  Schedule New
+                </button>
+              </div>
+              <div className="space-y-4">
+                {[
+                  { name: 'Rajesh Sharma', time: '10:00 AM', type: 'General Checkup', date: '20 Jan', status: 'Confirmed' },
+                  { name: 'Priya Kumar', time: '11:30 AM', type: 'Follow-up', date: '20 Jan', status: 'Confirmed' },
+                  { name: 'Amit Verma', time: '2:00 PM', type: 'Prescription Review', date: '20 Jan', status: 'Confirmed' },
+                  { name: 'Sunita Patel', time: '3:30 PM', type: 'Consultation', date: '20 Jan', status: 'Pending' },
+                  { name: 'Rahul Singh', time: '10:00 AM', type: 'Follow-up', date: '21 Jan', status: 'Scheduled' },
+                  { name: 'Anjali Gupta', time: '11:00 AM', type: 'Routine Check', date: '21 Jan', status: 'Scheduled' }
+                ].map((apt, idx) => (
+                  <div key={idx} className={`flex items-center justify-between p-4 rounded-xl border-l-4 ${
+                    idx % 3 === 0 ? 'bg-teal-50 border-teal-500' :
+                    idx % 3 === 1 ? 'bg-cyan-50 border-cyan-500' :
+                    'bg-blue-50 border-blue-500'
+                  }`}>
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold ${
+                        idx % 3 === 0 ? 'bg-teal-400' :
+                        idx % 3 === 1 ? 'bg-cyan-400' :
+                        'bg-blue-400'
+                      }`}>
+                        {apt.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-800">{apt.name}</h3>
+                        <p className="text-sm text-gray-600">{apt.type} • {apt.date}</p>
+                      </div>
+                    </div>
+                    <div className="text-right flex items-center gap-4">
+                      <div>
+                        <p className="font-semibold text-teal-600">{apt.time}</p>
+                        <span className={`text-xs px-2 py-1 rounded-full font-semibold ${
+                          apt.status === 'Confirmed' ? 'bg-green-100 text-green-600' :
+                          apt.status === 'Pending' ? 'bg-yellow-100 text-yellow-600' :
+                          'bg-blue-100 text-blue-600'
+                        }`}>
+                          {apt.status}
+                        </span>
+                      </div>
+                      <button className="text-teal-600 hover:text-teal-700">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Consultations Section */}
+          {showConsultations && (
+            <div className="bg-white rounded-3xl p-8 shadow-xl">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-3xl font-bold text-gray-800">Recent Consultations</h2>
+                <button className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                  New Consultation
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { name: 'Rajesh Sharma', date: '19 Jan 2026', diagnosis: 'Hypertension - Stage 1', notes: 'Blood pressure: 145/92. Prescribed medication and lifestyle changes.', duration: '30 min' },
+                  { name: 'Priya Kumar', date: '18 Jan 2026', diagnosis: 'Diabetes Management', notes: 'HbA1c: 7.2%. Adjusted insulin dosage. Follow-up in 2 weeks.', duration: '45 min' },
+                  { name: 'Amit Verma', date: '17 Jan 2026', diagnosis: 'Post-cardiac checkup', notes: 'ECG normal. Cholesterol levels improving. Continue current medication.', duration: '35 min' },
+                  { name: 'Sunita Patel', date: '16 Jan 2026', diagnosis: 'Asthma Control', notes: 'Breathing improved. Inhaler technique corrected. Peak flow good.', duration: '25 min' }
+                ].map((consult, idx) => (
+                  <div key={idx} className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-6 border border-teal-100 hover:shadow-lg transition-all">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-800">{consult.name}</h3>
+                        <p className="text-sm text-gray-600">{consult.date} • {consult.duration}</p>
+                      </div>
+                      <span className="bg-teal-100 text-teal-600 text-xs px-3 py-1 rounded-full font-semibold">
+                        Completed
+                      </span>
+                    </div>
+                    <div className="mb-4">
+                      <p className="text-sm font-semibold text-gray-700 mb-1">Diagnosis:</p>
+                      <p className="text-sm text-gray-800">{consult.diagnosis}</p>
+                    </div>
+                    <div className="mb-4">
+                      <p className="text-sm font-semibold text-gray-700 mb-1">Notes:</p>
+                      <p className="text-sm text-gray-600">{consult.notes}</p>
+                    </div>
+                    <button className="w-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white py-2 rounded-xl text-sm font-semibold hover:shadow-lg transition-all">
+                      View Full Record
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Prescriptions Section */}
+          {showPrescriptions && (
+            <div className="bg-white rounded-3xl p-8 shadow-xl">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-3xl font-bold text-gray-800">Recent Prescriptions</h2>
+                <button className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                  Write New Prescription
+                </button>
+              </div>
+              <div className="space-y-4">
+                {[
+                  { patient: 'Rajesh Sharma', date: '19 Jan 2026', medicines: ['Amlodipine 5mg - Once daily', 'Aspirin 75mg - Once daily'], duration: '30 days', status: 'Active' },
+                  { patient: 'Priya Kumar', date: '18 Jan 2026', medicines: ['Metformin 500mg - Twice daily', 'Glimepiride 2mg - Before breakfast'], duration: '30 days', status: 'Active' },
+                  { patient: 'Amit Verma', date: '17 Jan 2026', medicines: ['Atorvastatin 10mg - Once daily at night', 'Clopidogrel 75mg - Once daily'], duration: '60 days', status: 'Active' },
+                  { patient: 'Sunita Patel', date: '16 Jan 2026', medicines: ['Salbutamol Inhaler - As needed', 'Montelukast 10mg - Once daily at night'], duration: '90 days', status: 'Active' }
+                ].map((rx, idx) => (
+                  <div key={idx} className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-6 border border-teal-100 hover:shadow-lg transition-all">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-800">{rx.patient}</h3>
+                        <p className="text-sm text-gray-600">Prescribed on {rx.date}</p>
+                      </div>
+                      <span className="bg-green-100 text-green-600 text-xs px-3 py-1 rounded-full font-semibold">
+                        {rx.status}
+                      </span>
+                    </div>
+                    <div className="mb-4">
+                      <p className="text-sm font-semibold text-gray-700 mb-2">Medicines:</p>
+                      <ul className="space-y-1">
+                        {rx.medicines.map((med, medIdx) => (
+                          <li key={medIdx} className="text-sm text-gray-800 flex items-start gap-2">
+                            <span className="text-teal-500">•</span>
+                            <span>{med}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm text-gray-600">Duration: <span className="font-semibold text-gray-800">{rx.duration}</span></p>
+                      <button className="text-teal-600 hover:text-teal-700 text-sm font-semibold flex items-center gap-1">
+                        View Details
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>

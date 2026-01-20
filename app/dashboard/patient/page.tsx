@@ -16,11 +16,10 @@ export default function PatientDashboard() {
   const router = useRouter();
   const [greeting, setGreeting] = useState('Welcome');
   const [email, setEmail] = useState('');
-  const [selectedMetric, setSelectedMetric] = useState<HealthMetric | null>(null);
-  const [showDoctors, setShowDoctors] = useState(false);
-  const [showChatbot, setShowChatbot] = useState(false);
-  const [chatMessages, setChatMessages] = useState<Array<{text: string, sender: 'user' | 'bot'}>>([]);
-  const [chatInput, setChatInput] = useState('');
+  const [expandedMetric, setExpandedMetric] = useState<string | null>(null);
+  const [showMedicineSearch, setShowMedicineSearch] = useState(false);
+  const [medicineQuery, setMedicineQuery] = useState('');
+  const [showMoodCheckIn, setShowMoodCheckIn] = useState(false);
 
   const healthMetrics: HealthMetric[] = [
     {
@@ -143,12 +142,12 @@ export default function PatientDashboard() {
             </svg>
             AI Chatbot
           </button>
-          <div className="flex items-center gap-3 px-4 py-3 text-gray-400 rounded-xl font-medium cursor-not-allowed">
+          <button onClick={openMedicineMatrix} className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors w-full">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
             </svg>
-            Medicine Matrix (Coming Soon)
-          </div>
+            Medicine Matrix
+          </button>
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
@@ -190,24 +189,338 @@ export default function PatientDashboard() {
             <p className="text-gray-600">Signed up with {email}</p>
           </div>
 
-          {/* Health Matrix */}
+          {/* Health Matrix - Enhanced Interactive Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {healthMetrics.map((metric, index) => (
-              <div 
-                key={index}
-                onClick={() => setSelectedMetric(metric)}
-                className={`bg-gradient-to-br ${metric.color} rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer`}
-              >
-                <div className="flex flex-col items-center text-white">
-                  <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-6">
-                    {metric.icon}
-                  </div>
-                  <h3 className="text-3xl font-bold mb-4">{metric.title}</h3>
-                  <div className="text-6xl font-bold mb-2">{metric.percentage}%</div>
-                  <p className="text-sm opacity-90">{metric.status}</p>
+            {/* Physical Health Card - Animated Circular Progress */}
+            <div 
+              onMouseEnter={() => setShowPhysicalBreakdown(true)}
+              onMouseLeave={() => setShowPhysicalBreakdown(false)}
+              className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer relative overflow-hidden group"
+            >
+              {/* Heartbeat pulse animation */}
+              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 animate-pulse"></div>
+              
+              <div className="flex flex-col items-center text-white relative z-10">
+                {/* Breathing heart icon */}
+                <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-6 animate-[pulse_2s_ease-in-out_infinite]">
+                  <svg className="w-12 h-12 animate-[pulse_1.5s_ease-in-out_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                  </svg>
                 </div>
+                
+                <h3 className="text-3xl font-bold mb-4">Physical Health</h3>
+                
+                {/* Animated circular progress ring */}
+                <div className="relative w-32 h-32 mb-4">
+                  <svg className="transform -rotate-90 w-32 h-32">
+                    <circle cx="64" cy="64" r="56" stroke="rgba(255,255,255,0.2)" strokeWidth="8" fill="none" />
+                    <circle 
+                      cx="64" cy="64" r="56" 
+                      stroke="white" 
+                      strokeWidth="8" 
+                      fill="none"
+                      strokeDasharray="351.86"
+                      strokeDashoffset="76.5"
+                      className="transition-all duration-1000 ease-out animate-[pulse_2s_ease-in-out_infinite]"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-4xl font-bold">78.2%</span>
+                  </div>
+                </div>
+                
+                <p className="text-sm opacity-90 mb-4">Excellent condition</p>
+                <p className="text-xs opacity-75 italic">Your physical health is improving steadily over the past 7 days</p>
+                
+                {/* Mini breakdown overlay on hover */}
+                {showPhysicalBreakdown && (
+                  <div className="absolute inset-0 bg-teal-700 bg-opacity-95 p-6 flex flex-col justify-center animate-[fadeIn_0.3s_ease-in]">
+                    <h4 className="text-xl font-bold mb-4">Health Factors</h4>
+                    
+                    <div className="space-y-3 text-sm">
+                      <div>
+                        <div className="flex justify-between mb-1">
+                          <span>Activity Level</span>
+                          <span>85%</span>
+                        </div>
+                        <div className="h-2 bg-white bg-opacity-20 rounded-full overflow-hidden">
+                          <div className="h-full bg-white rounded-full animate-[slideIn_0.8s_ease-out]" style={{width: '85%'}}></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between mb-1">
+                          <span>Sleep Quality</span>
+                          <span>72%</span>
+                        </div>
+                        <div className="h-2 bg-white bg-opacity-20 rounded-full overflow-hidden">
+                          <div className="h-full bg-white rounded-full animate-[slideIn_0.8s_ease-out]" style={{width: '72%'}}></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between mb-1">
+                          <span>Hydration</span>
+                          <span>68%</span>
+                        </div>
+                        <div className="h-2 bg-white bg-opacity-20 rounded-full overflow-hidden">
+                          <div className="h-full bg-white rounded-full animate-[slideIn_0.8s_ease-out]" style={{width: '68%'}}></div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex justify-between mb-1">
+                          <span>Vitals Stability</span>
+                          <span>88%</span>
+                        </div>
+                        <div className="h-2 bg-white bg-opacity-20 rounded-full overflow-hidden">
+                          <div className="h-full bg-white rounded-full animate-[slideIn_0.8s_ease-out]" style={{width: '88%'}}></div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setExpandPhysicalTrend(!expandPhysicalTrend); }}
+                      className="mt-4 bg-white text-teal-600 px-4 py-2 rounded-full text-sm font-semibold hover:bg-opacity-90 transition-all"
+                    >
+                      View 7-Day Trend
+                    </button>
+                  </div>
+                )}
+                
+                {/* Expanded 7-day trend */}
+                {expandPhysicalTrend && (
+                  <div className="absolute inset-0 bg-white text-gray-800 p-6 animate-[slideUp_0.4s_ease-out] overflow-auto">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setExpandPhysicalTrend(false); }}
+                      className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                      </svg>
+                    </button>
+                    
+                    <h3 className="text-2xl font-bold mb-4 text-teal-600">7-Day Health Trend</h3>
+                    <div className="flex items-end justify-between h-32 gap-2 mb-4">
+                      {[65, 68, 72, 70, 75, 78, 78.2].map((value, idx) => (
+                        <div key={idx} className="flex-1 flex flex-col items-center">
+                          <div 
+                            className="w-full bg-gradient-to-t from-teal-500 to-teal-300 rounded-t-lg transition-all hover:opacity-80" 
+                            style={{ height: `${(value / 100) * 100}%` }}
+                          ></div>
+                          <p className="text-xs text-gray-600 mt-2">Day {idx + 1}</p>
+                          <p className="text-xs font-bold text-teal-600">{value}%</p>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-600">📈 Steady improvement with +13.2% over the week</p>
+                  </div>
+                )}
               </div>
-            ))}
+            </div>
+
+            {/* Mental Health Card - Wave Progress Animation */}
+            <div 
+              onClick={() => setShowMentalPanel(!showMentalPanel)}
+              className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer relative overflow-hidden group"
+            >
+              {/* Calm glow effect on hover */}
+              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-xl"></div>
+              
+              <div className="flex flex-col items-center text-white relative z-10">
+                <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-6">
+                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                  </svg>
+                </div>
+                
+                <h3 className="text-3xl font-bold mb-4">Mental Health</h3>
+                
+                {/* Wave-style progress */}
+                <div className="relative w-full h-24 mb-4">
+                  <svg viewBox="0 0 200 100" className="w-full h-full">
+                    <defs>
+                      <linearGradient id="waveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="rgba(255,255,255,0.8)" />
+                        <stop offset="100%" stopColor="rgba(255,255,255,0.2)" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M0,50 Q25,20 50,50 T100,50 T150,50 T200,50 L200,100 L0,100 Z"
+                      fill="url(#waveGradient)"
+                      className="animate-[wave_3s_ease-in-out_infinite]"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-5xl font-bold">90.8%</span>
+                  </div>
+                </div>
+                
+                <p className="text-sm opacity-90 mb-2">Very good state</p>
+                <p className="text-xs opacity-75 italic">Your emotional balance is consistently strong</p>
+              </div>
+              
+              {/* Slide-up mental health panel */}
+              {showMentalPanel && (
+                <div className="absolute inset-0 bg-indigo-700 p-6 animate-[slideUp_0.4s_ease-out] overflow-auto">
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); setShowMentalPanel(false); }}
+                    className="absolute top-4 right-4 text-white"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                  
+                  <h3 className="text-xl font-bold text-white mb-4">Mental Wellness Insights</h3>
+                  
+                  <div className="space-y-4 text-white text-sm">
+                    <div className="bg-white bg-opacity-20 rounded-xl p-3">
+                      <div className="flex justify-between mb-2">
+                        <span className="font-semibold">Mood Consistency</span>
+                        <span>92%</span>
+                      </div>
+                      <p className="text-xs opacity-90">Your mood has been stable and positive throughout the week.</p>
+                    </div>
+                    
+                    <div className="bg-white bg-opacity-20 rounded-xl p-3">
+                      <div className="flex justify-between mb-2">
+                        <span className="font-semibold">Stress Indicators</span>
+                        <span className="text-green-300">Low</span>
+                      </div>
+                      <p className="text-xs opacity-90">Great job managing stress! Your relaxation practices are working well.</p>
+                    </div>
+                    
+                    <div className="bg-white bg-opacity-20 rounded-xl p-3">
+                      <div className="flex justify-between mb-2">
+                        <span className="font-semibold">Restfulness Score</span>
+                        <span>88%</span>
+                      </div>
+                      <p className="text-xs opacity-90">You're getting quality rest. Keep maintaining your sleep routine.</p>
+                    </div>
+                    
+                    <div className="bg-indigo-800 rounded-xl p-4 mt-4">
+                      <p className="font-semibold mb-2">💭 Daily Check-in</p>
+                      <p className="text-xs mb-3 opacity-90">How are you feeling today?</p>
+                      <div className="flex gap-2">
+                        <button className="flex-1 bg-white text-indigo-600 py-2 rounded-lg text-xs font-semibold hover:bg-opacity-90">😊 Great</button>
+                        <button className="flex-1 bg-white text-indigo-600 py-2 rounded-lg text-xs font-semibold hover:bg-opacity-90">😐 Okay</button>
+                        <button className="flex-1 bg-white text-indigo-600 py-2 rounded-lg text-xs font-semibold hover:bg-opacity-90">😔 Low</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Overall Wellness Card - Multi-layered Progress Ring */}
+            <div 
+              onMouseEnter={() => setShowWellnessLayers(true)}
+              onMouseLeave={() => setShowWellnessLayers(false)}
+              className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer relative overflow-hidden"
+            >
+              <div className="flex flex-col items-center text-white">
+                <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-6">
+                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                </div>
+                
+                <h3 className="text-3xl font-bold mb-4">Overall Wellness</h3>
+                
+                {/* Multi-layered progress rings */}
+                <div className="relative w-40 h-40 mb-4">
+                  {/* Outer ring - Physical (teal) */}
+                  <svg className="absolute inset-0 transform -rotate-90 w-40 h-40">
+                    <circle cx="80" cy="80" r="70" stroke="rgba(255,255,255,0.2)" strokeWidth="6" fill="none" />
+                    <circle 
+                      cx="80" cy="80" r="70" 
+                      stroke="#14b8a6" 
+                      strokeWidth="6" 
+                      fill="none"
+                      strokeDasharray="439.82"
+                      strokeDashoffset="95.76"
+                      className={`transition-all duration-1000 ${showWellnessLayers ? 'opacity-100' : 'opacity-50'}`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  
+                  {/* Middle ring - Mental (indigo) */}
+                  <svg className="absolute inset-0 transform -rotate-90 w-40 h-40">
+                    <circle cx="80" cy="80" r="58" stroke="rgba(255,255,255,0.2)" strokeWidth="6" fill="none" />
+                    <circle 
+                      cx="80" cy="80" r="58" 
+                      stroke="#6366f1" 
+                      strokeWidth="6" 
+                      fill="none"
+                      strokeDasharray="364.42"
+                      strokeDashoffset="33.53"
+                      className={`transition-all duration-1000 ${showWellnessLayers ? 'opacity-100' : 'opacity-50'}`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  
+                  {/* Inner ring - Lifestyle (pink) */}
+                  <svg className="absolute inset-0 transform -rotate-90 w-40 h-40">
+                    <circle cx="80" cy="80" r="46" stroke="rgba(255,255,255,0.2)" strokeWidth="6" fill="none" />
+                    <circle 
+                      cx="80" cy="80" r="46" 
+                      stroke="#ec4899" 
+                      strokeWidth="6" 
+                      fill="none"
+                      strokeDasharray="289.03"
+                      strokeDashoffset="57.81"
+                      className={`transition-all duration-1000 ${showWellnessLayers ? 'opacity-100' : 'opacity-50'}`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <span className="text-4xl font-bold">84.5%</span>
+                      {showWellnessLayers && (
+                        <div className="text-xs mt-1">
+                          <p className="text-teal-200">↑ +2.3%</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                <p className="text-sm opacity-90 mb-2">Great progress!</p>
+                <p className="text-xs opacity-75 italic text-center px-2">Strong balance between activity and rest</p>
+                
+                {showWellnessLayers && (
+                  <div className="mt-4 space-y-2 text-xs w-full">
+                    <div className="flex items-center justify-between bg-white bg-opacity-20 rounded-lg p-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-teal-400 rounded-full"></div>
+                        <span>Physical</span>
+                      </div>
+                      <span className="font-bold">78.2%</span>
+                    </div>
+                    <div className="flex items-center justify-between bg-white bg-opacity-20 rounded-lg p-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-indigo-400 rounded-full"></div>
+                        <span>Mental</span>
+                      </div>
+                      <span className="font-bold">90.8%</span>
+                    </div>
+                    <div className="flex items-center justify-between bg-white bg-opacity-20 rounded-lg p-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-pink-400 rounded-full"></div>
+                        <span>Lifestyle</span>
+                      </div>
+                      <span className="font-bold">80.0%</span>
+                    </div>
+                    <div className="bg-purple-700 rounded-lg p-2 text-center">
+                      <p className="text-xs">📊 Follow daily recommendations for +5% boost</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Health Metric Modal */}
@@ -309,31 +622,84 @@ export default function PatientDashboard() {
             </div>
           )}
 
-          {/* Quick Actions - Only SOS and Medicine Matrix */}
+          {/* Quick Actions - Enhanced SOS and Medicine Matrix */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* SOS Emergency */}
+            {/* SOS Emergency - Enhanced with Pulse and Emergency Actions */}
             <div 
-              onClick={callSOS}
-              className="bg-gradient-to-br from-red-500 to-red-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all cursor-pointer transform hover:scale-105"
+              className="bg-gradient-to-br from-red-500 to-red-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all cursor-pointer transform hover:scale-105 relative overflow-hidden group"
+              onClick={(e) => {
+                if (!(e.target as HTMLElement).closest('button')) {
+                  callSOS();
+                }
+              }}
             >
-              <div className="flex flex-col items-center text-white">
-                <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-4 animate-pulse">
+              {/* Rhythmic red pulse animation */}
+              <div className="absolute inset-0 bg-red-400 opacity-0 group-hover:opacity-30 animate-[pulse_2s_ease-in-out_infinite]"></div>
+              
+              <div className="flex flex-col items-center text-white relative z-10">
+                <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-4 animate-[heartbeat_1.5s_ease-in-out_infinite]">
                   <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                   </svg>
                 </div>
                 <h3 className="text-3xl font-bold mb-2">SOS Emergency</h3>
                 <p className="text-lg opacity-90 mb-4">24/7 Emergency Helpline</p>
-                <div className="text-2xl font-bold">📞 108 / 102</div>
+                <p className="text-xs opacity-80 mb-4 italic">Instant help, no AI delay</p>
+
+                {/* Emergency Action Buttons */}
+                <div className="w-full space-y-3 mt-2">
+                  <a 
+                    href="tel:108"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center justify-center gap-3 w-full bg-white bg-opacity-20 hover:bg-opacity-30 py-3 px-4 rounded-xl font-semibold text-lg transition-all"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    Call 108 Ambulance
+                  </a>
+                  <a 
+                    href="tel:102"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center justify-center gap-3 w-full bg-white bg-opacity-20 hover:bg-opacity-30 py-3 px-4 rounded-xl font-semibold text-lg transition-all"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    Call 102 Medical
+                  </a>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition((pos) => {
+                          const shareText = `🚨 Emergency! I need help. My location: https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                          if (navigator.share) {
+                            navigator.share({ title: 'Emergency Location', text: shareText });
+                          } else {
+                            alert('Location: ' + shareText);
+                          }
+                        });
+                      }
+                    }}
+                    className="flex items-center justify-center gap-3 w-full bg-white bg-opacity-20 hover:bg-opacity-30 py-3 px-4 rounded-xl font-semibold text-lg transition-all"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Share Live Location
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Medicine Matrix */}
+            {/* Medicine Matrix - Interactive Search */}
             <div 
-              onClick={openMedicineMatrix}
-              className="bg-gradient-to-br from-green-500 to-green-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all cursor-pointer transform hover:scale-105"
+              className="bg-gradient-to-br from-green-500 to-green-600 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all cursor-pointer relative overflow-hidden group"
+              onClick={() => !showMedicineSearch && setShowMedicineSearch(true)}
             >
-              <div className="flex flex-col items-center text-white">
+              <div className="flex flex-col items-center text-white relative z-10">
                 <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mb-4">
                   <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
@@ -341,10 +707,98 @@ export default function PatientDashboard() {
                 </div>
                 <h3 className="text-3xl font-bold mb-2">Medicine Matrix</h3>
                 <p className="text-lg opacity-90 mb-4">Find nearby pharmacies</p>
-                <div className="text-sm font-semibold bg-white bg-opacity-20 px-4 py-2 rounded-full">Search Medicines →</div>
+                
+                {!showMedicineSearch ? (
+                  <>
+                    <div className="flex gap-2 mb-4 flex-wrap justify-center">
+                      <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-xs">Nearest Pharmacy</span>
+                      <span className="bg-white bg-opacity-20 px-3 py-1 rounded-full text-xs">Repeat Last Medicine</span>
+                    </div>
+                    <div className="text-sm font-semibold bg-white bg-opacity-20 px-4 py-2 rounded-full hover:bg-opacity-30 transition-all">Search Medicines →</div>
+                  </>
+                ) : (
+                  <div className="w-full space-y-4 animate-[slideDown_0.3s_ease-out]">
+                    {/* Inline Search Field */}
+                    <div className="relative">
+                      <input 
+                        type="text"
+                        value={medicineQuery}
+                        onChange={(e) => setMedicineQuery(e.target.value)}
+                        placeholder="Search medicine or pharmacy..."
+                        className="w-full bg-white text-gray-800 px-4 py-3 rounded-xl pr-10 focus:outline-none focus:ring-2 focus:ring-white"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <svg className="w-5 h-5 text-gray-400 absolute right-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                      </svg>
+                    </div>
+
+                    {/* AI-Powered Suggestions */}
+                    <div className="bg-white bg-opacity-20 rounded-xl p-4 space-y-2">
+                      <p className="text-xs opacity-90 italic mb-2">💡 Based on your recent prescriptions:</p>
+                      {['Paracetamol 500mg', 'Vitamin D Supplements', 'Amoxicillin 250mg'].map((med, idx) => (
+                        <button
+                          key={idx}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setMedicineQuery(med);
+                          }}
+                          className="flex items-center justify-between w-full bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-2 rounded-lg text-sm transition-all"
+                        >
+                          <span>{med}</span>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                          </svg>
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Nearby Pharmacies Preview */}
+                    <div className="bg-white bg-opacity-20 rounded-xl p-4 space-y-2">
+                      <p className="text-xs font-semibold mb-2">📍 Nearest Pharmacies:</p>
+                      {[
+                        { name: 'Apollo Pharmacy', distance: '0.8 km', status: 'Open now' },
+                        { name: 'MedPlus', distance: '1.2 km', status: 'Open 24/7' }
+                      ].map((pharmacy, idx) => (
+                        <div key={idx} className="flex items-center justify-between bg-white bg-opacity-20 px-3 py-2 rounded-lg text-sm">
+                          <div>
+                            <p className="font-semibold">{pharmacy.name}</p>
+                            <p className="text-xs opacity-80">{pharmacy.distance} • {pharmacy.status}</p>
+                          </div>
+                          <button className="text-white">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowMedicineSearch(false);
+                        setMedicineQuery('');
+                      }}
+                      className="w-full bg-white text-green-600 py-2 rounded-xl font-semibold hover:bg-opacity-90 transition-all"
+                    >
+                      Close
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
+
+          <style jsx>{`
+            @keyframes heartbeat {
+              0%, 100% { transform: scale(1); }
+              14% { transform: scale(1.15); }
+              28% { transform: scale(1); }
+              42% { transform: scale(1.15); }
+              56% { transform: scale(1); }
+            }
+          `}</style>
 
           {/* Doctor Appointment Section */}
           <div className="bg-white rounded-3xl p-8 shadow-xl">
@@ -354,10 +808,10 @@ export default function PatientDashboard() {
                 <p className="text-gray-600 mt-1">Consult with certified doctors and specialists</p>
               </div>
               <button 
-                onClick={() => setShowDoctors(!showDoctors)}
+                onClick={() => router.push('/appointments/book')}
                 className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
               >
-                {showDoctors ? 'Hide Doctors' : 'View All Doctors'}
+                Book Now
               </button>
             </div>
 
@@ -513,104 +967,12 @@ export default function PatientDashboard() {
                 </div>
               </div>
               <button 
-                onClick={() => setShowChatbot(!showChatbot)}
+                onClick={() => router.push('/chat/assistant')}
                 className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
               >
-                {showChatbot ? 'Close Chat' : 'Start Chat'}
+                Start Chat
               </button>
             </div>
-
-            {showChatbot && (
-              <div className="mt-6">
-                {/* Medical Disclaimer */}
-                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-xl">
-                  <div className="flex items-start gap-3">
-                    <svg className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                    <div>
-                      <h4 className="font-bold text-yellow-800 mb-1">Medical Disclaimer</h4>
-                      <p className="text-sm text-yellow-700">This AI chatbot provides general health information only. Always consult a qualified healthcare professional for medical advice, diagnosis, or treatment.</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Chat Interface */}
-                <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-2xl p-6 mb-4">
-                  {/* AI Greeting */}
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                      </svg>
-                    </div>
-                    <div className="bg-white rounded-2xl rounded-tl-none p-4 shadow-md max-w-lg">
-                      <p className="font-semibold text-gray-800 mb-2">👋 Hello! I'm your AI Health Assistant. I can help you with:</p>
-                      <ul className="text-sm text-gray-700 space-y-1 ml-4">
-                        <li>• General health questions</li>
-                        <li>• Symptom information</li>
-                        <li>• Wellness tips</li>
-                        <li>• Medication queries</li>
-                        <li>• Preventive care advice</li>
-                      </ul>
-                      <p className="text-sm text-gray-600 mt-3">How can I assist you today?</p>
-                    </div>
-                  </div>
-
-                  {/* Chat Messages */}
-                  <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
-                    {chatMessages.map((msg, idx) => (
-                      <div key={idx} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        {msg.sender === 'bot' && (
-                          <div className="w-8 h-8 bg-gradient-to-br from-teal-400 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mr-2">
-                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                            </svg>
-                          </div>
-                        )}
-                        <div className={`${msg.sender === 'user' ? 'bg-gradient-to-r from-teal-500 to-blue-500 text-white' : 'bg-white text-gray-800'} rounded-2xl px-4 py-2 max-w-md shadow-md`}>
-                          <p className="text-sm">{msg.text}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Quick Questions */}
-                  <div className="mb-4">
-                    <p className="text-sm font-semibold text-gray-700 mb-2">⚡ Quick Questions:</p>
-                    <div className="flex flex-wrap gap-2">
-                      <button onClick={() => setChatInput("What are symptoms of flu?")} className="bg-white hover:bg-gray-50 text-gray-700 text-xs px-3 py-2 rounded-full border border-gray-200 transition-colors">
-                        What are symptoms of flu?
-                      </button>
-                      <button onClick={() => setChatInput("How to reduce stress?")} className="bg-white hover:bg-gray-50 text-gray-700 text-xs px-3 py-2 rounded-full border border-gray-200 transition-colors">
-                        How to reduce stress?
-                      </button>
-                      <button onClick={() => setChatInput("Tips for better sleep")} className="bg-white hover:bg-gray-50 text-gray-700 text-xs px-3 py-2 rounded-full border border-gray-200 transition-colors">
-                        Tips for better sleep
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Input Box */}
-                  <div className="flex gap-2">
-                    <input 
-                      type="text"
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                      placeholder="Type your health question..."
-                      className="flex-1 bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                    />
-                    <button 
-                      onClick={handleSendMessage}
-                      className="bg-gradient-to-r from-teal-500 to-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all"
-                    >
-                      Send
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </main>
