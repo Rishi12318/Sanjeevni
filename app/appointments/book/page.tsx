@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 
 interface Doctor {
   id: string;
@@ -23,7 +23,7 @@ interface Hospital {
   facilities: string[];
 }
 
-export default function BookAppointmentPage() {
+function BookAppointmentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const doctorId = searchParams.get('doctor');
@@ -833,5 +833,13 @@ You will receive a confirmation SMS and email shortly.
       </div>
       )}
     </div>
+  );
+}
+
+export default function BookAppointmentPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <BookAppointmentContent />
+    </Suspense>
   );
 }
