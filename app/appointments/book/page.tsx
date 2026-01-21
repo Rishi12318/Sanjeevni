@@ -34,6 +34,12 @@ export default function BookAppointmentPage() {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [reasonForVisit, setReasonForVisit] = useState('');
+  const [selectedProblemType, setSelectedProblemType] = useState<string>('');
+  const [showDoctorList, setShowDoctorList] = useState(false);
+  const [specializationFilter, setSpecializationFilter] = useState<string>('all');
+  const [availabilityFilter, setAvailabilityFilter] = useState<string>('all');
+  const [genderFilter, setGenderFilter] = useState<string>('all');
+  const [languageFilter, setLanguageFilter] = useState<string>('all');
 
   const doctors: Doctor[] = [
     {
@@ -68,6 +74,105 @@ export default function BookAppointmentPage() {
       physicalFee: 700,
       virtualFee: 450,
       avatar: 'ER'
+    },
+    {
+      id: '4',
+      name: 'Dr. Rajesh Kumar',
+      specialization: 'Orthopedic Surgeon',
+      experience: 18,
+      rating: 4.9,
+      patients: 2800,
+      physicalFee: 900,
+      virtualFee: 600,
+      avatar: 'RK'
+    },
+    {
+      id: '5',
+      name: 'Dr. Priya Sharma',
+      specialization: 'Pediatrician',
+      experience: 14,
+      rating: 4.8,
+      patients: 3500,
+      physicalFee: 650,
+      virtualFee: 450,
+      avatar: 'PS'
+    },
+    {
+      id: '6',
+      name: 'Dr. Amit Patel',
+      specialization: 'Neurologist',
+      experience: 16,
+      rating: 4.9,
+      patients: 2200,
+      physicalFee: 1000,
+      virtualFee: 700,
+      avatar: 'AP'
+    },
+    {
+      id: '7',
+      name: 'Dr. Ananya Reddy',
+      specialization: 'Gynecologist',
+      experience: 13,
+      rating: 4.8,
+      patients: 2900,
+      physicalFee: 750,
+      virtualFee: 500,
+      avatar: 'AR'
+    },
+    {
+      id: '8',
+      name: 'Dr. Vikram Singh',
+      specialization: 'Psychiatrist',
+      experience: 11,
+      rating: 4.7,
+      patients: 1600,
+      physicalFee: 800,
+      virtualFee: 550,
+      avatar: 'VS'
+    },
+    {
+      id: '9',
+      name: 'Dr. Deepa Menon',
+      specialization: 'Endocrinologist',
+      experience: 15,
+      rating: 4.8,
+      patients: 2100,
+      physicalFee: 850,
+      virtualFee: 600,
+      avatar: 'DM'
+    },
+    {
+      id: '10',
+      name: 'Dr. Arjun Verma',
+      specialization: 'Gastroenterologist',
+      experience: 14,
+      rating: 4.7,
+      patients: 2400,
+      physicalFee: 900,
+      virtualFee: 650,
+      avatar: 'AV'
+    },
+    {
+      id: '11',
+      name: 'Dr. Kavita Desai',
+      specialization: 'Ophthalmologist',
+      experience: 12,
+      rating: 4.8,
+      patients: 2700,
+      physicalFee: 700,
+      virtualFee: 500,
+      avatar: 'KD'
+    },
+    {
+      id: '12',
+      name: 'Dr. Suresh Rao',
+      specialization: 'ENT Specialist',
+      experience: 10,
+      rating: 4.6,
+      patients: 1900,
+      physicalFee: 650,
+      virtualFee: 450,
+      avatar: 'SR'
     }
   ];
 
@@ -92,6 +197,55 @@ export default function BookAppointmentPage() {
       location: 'Banjara Hills, Hyderabad',
       distance: '3.8 km',
       facilities: ['Emergency', 'ICU', 'Cardiology', 'Pharmacy']
+    },
+    {
+      id: '4',
+      name: 'Continental Hospitals',
+      location: 'Gachibowli, Hyderabad',
+      distance: '6.2 km',
+      facilities: ['Emergency', 'ICU', 'Surgery', 'Neurology', 'Lab']
+    },
+    {
+      id: '5',
+      name: 'Kims Hospital',
+      location: 'Secunderabad, Hyderabad',
+      distance: '5.5 km',
+      facilities: ['Emergency', 'ICU', 'Oncology', 'Cardiology', 'Pharmacy']
+    },
+    {
+      id: '6',
+      name: 'Maxcure Hospital',
+      location: 'Madhapur, Hyderabad',
+      distance: '7.0 km',
+      facilities: ['Emergency', 'Surgery', 'Orthopedics', 'Lab', 'Imaging']
+    },
+    {
+      id: '7',
+      name: 'Rainbow Children Hospital',
+      location: 'Banjara Hills, Hyderabad',
+      distance: '3.5 km',
+      facilities: ['Pediatric Emergency', 'NICU', 'Pediatric ICU', 'Lab']
+    },
+    {
+      id: '8',
+      name: 'Aware Gleneagles Global',
+      location: 'LB Nagar, Hyderabad',
+      distance: '8.3 km',
+      facilities: ['Emergency', 'ICU', 'Nephrology', 'Cardiology', 'Pharmacy']
+    },
+    {
+      id: '9',
+      name: 'Medicover Hospital',
+      location: 'Madhapur, Hyderabad',
+      distance: '6.8 km',
+      facilities: ['Emergency', 'Surgery', 'Lab', 'Imaging', 'Pharmacy']
+    },
+    {
+      id: '10',
+      name: 'Citizens Hospital',
+      location: 'Nallagandla, Hyderabad',
+      distance: '9.1 km',
+      facilities: ['Emergency', 'ICU', 'General Medicine', 'Lab', 'Pharmacy']
     }
   ];
 
@@ -112,9 +266,10 @@ export default function BookAppointmentPage() {
   useEffect(() => {
     if (doctorId) {
       const doctor = doctors.find(d => d.id === doctorId);
-      if (doctor) setSelectedDoctor(doctor);
-    } else if (doctors.length > 0) {
-      setSelectedDoctor(doctors[0]);
+      if (doctor) {
+        setSelectedDoctor(doctor);
+        setShowDoctorList(false);
+      }
     }
   }, [doctorId]);
 
@@ -144,10 +299,30 @@ You will receive a confirmation SMS and email shortly.
     router.push('/dashboard/patient');
   };
 
-  if (!selectedDoctor) return null;
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-50">
+      {/* CSS Animations */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      `}} />
+
       {/* Header */}
       <div className="bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-8 shadow-lg">
         <div className="max-w-6xl mx-auto">
@@ -168,7 +343,8 @@ You will receive a confirmation SMS and email shortly.
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* Doctor Profile Card */}
+        {/* Doctor Profile Card - Only show if doctor is selected */}
+        {selectedDoctor && (
         <div className="bg-white rounded-3xl p-8 shadow-xl mb-8">
           <div className="flex items-start gap-6 mb-6">
             <div className="w-24 h-24 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center text-white text-3xl font-bold flex-shrink-0">
@@ -211,6 +387,7 @@ You will receive a confirmation SMS and email shortly.
             </div>
           </div>
         </div>
+        )}
 
         {/* Appointment Type Selection */}
         <div className="bg-white rounded-3xl p-8 shadow-xl mb-8">
@@ -236,7 +413,7 @@ You will receive a confirmation SMS and email shortly.
               <div className="text-left">
                 <p className="text-xl font-bold text-gray-800">Physical Visit</p>
                 <p className="text-sm text-gray-600">In-person consultation at hospital</p>
-                <p className="text-lg font-bold text-teal-600 mt-1">₹{selectedDoctor.physicalFee}</p>
+                {selectedDoctor && <p className="text-lg font-bold text-teal-600 mt-1">₹{selectedDoctor.physicalFee}</p>}
               </div>
               {appointmentType === 'physical' && (
                 <svg className="w-8 h-8 text-teal-500 ml-auto" fill="currentColor" viewBox="0 0 20 20">
@@ -263,7 +440,7 @@ You will receive a confirmation SMS and email shortly.
               <div className="text-left">
                 <p className="text-xl font-bold text-gray-800">Virtual Visit</p>
                 <p className="text-sm text-gray-600">Video consultation from home</p>
-                <p className="text-lg font-bold text-cyan-600 mt-1">₹{selectedDoctor.virtualFee}</p>
+                {selectedDoctor && <p className="text-lg font-bold text-cyan-600 mt-1">₹{selectedDoctor.virtualFee}</p>}
               </div>
               {appointmentType === 'virtual' && (
                 <svg className="w-8 h-8 text-cyan-500 ml-auto" fill="currentColor" viewBox="0 0 20 20">
@@ -274,17 +451,68 @@ You will receive a confirmation SMS and email shortly.
           </div>
         </div>
 
+        {/* Problem Type Selection */}
+        <div className="bg-white rounded-3xl p-8 shadow-xl mb-8">
+          <h3 className="text-2xl font-bold text-gray-800 mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+            Step 2: Select Health Concern
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { id: 'checkup', name: 'General Checkup', icon: '🏥', desc: 'Routine health examination' },
+              { id: 'heart', name: 'Heart Issues', icon: '❤️', desc: 'Chest pain, palpitations' },
+              { id: 'skin', name: 'Skin Problems', icon: '🔬', desc: 'Rash, acne, allergies' },
+              { id: 'bone', name: 'Bone & Joints', icon: '🦴', desc: 'Pain, fractures, arthritis' },
+              { id: 'child', name: 'Child Care', icon: '👶', desc: 'Pediatric consultation' },
+              { id: 'brain', name: 'Neurological', icon: '🧠', desc: 'Headache, seizures, numbness' },
+              { id: 'women', name: 'Women\'s Health', icon: '👩', desc: 'Gynecological issues' },
+              { id: 'mental', name: 'Mental Health', icon: '🧘', desc: 'Anxiety, depression, stress' },
+              { id: 'diabetes', name: 'Diabetes & Hormones', icon: '💉', desc: 'Endocrine disorders' },
+              { id: 'stomach', name: 'Digestive Issues', icon: '🫃', desc: 'Stomach pain, indigestion' },
+              { id: 'eye', name: 'Eye Problems', icon: '👁️', desc: 'Vision, eye pain, infections' },
+              { id: 'ent', name: 'Ear, Nose, Throat', icon: '👂', desc: 'Hearing, sinus, throat issues' },
+              { id: 'emergency', name: 'Emergency', icon: '🚨', desc: 'Urgent medical attention' },
+              { id: 'followup', name: 'Follow-up Visit', icon: '📋', desc: 'Previous consultation review' },
+              { id: 'other', name: 'Other', icon: '💊', desc: 'Other health concerns' }
+            ].map((problem) => (
+              <button
+                key={problem.id}
+                onClick={() => setSelectedProblemType(problem.id)}
+                className={`flex items-start gap-3 p-4 rounded-2xl border-2 transition-all text-left ${
+                  selectedProblemType === problem.id
+                    ? 'border-teal-500 bg-teal-50 shadow-lg'
+                    : 'border-gray-200 hover:border-teal-300 hover:bg-gray-50'
+                }`}
+              >
+                <div className="text-3xl">{problem.icon}</div>
+                <div className="flex-1">
+                  <p className="font-bold text-gray-800">{problem.name}</p>
+                  <p className="text-xs text-gray-600 mt-1">{problem.desc}</p>
+                </div>
+                {selectedProblemType === problem.id && (
+                  <svg className="w-6 h-6 text-teal-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                  </svg>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Hospital Selection (Only for Physical) */}
         {appointmentType === 'physical' && (
           <div className="bg-white rounded-3xl p-8 shadow-xl mb-8">
             <h3 className="text-2xl font-bold text-gray-800 mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
-              Step 2: Select Hospital
+              Step 3: Select Hospital
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {hospitals.map((hospital) => (
                 <button
                   key={hospital.id}
-                  onClick={() => setSelectedHospital(hospital)}
+                  onClick={() => {
+                    setSelectedHospital(hospital);
+                    setShowDoctorList(true);
+                    setSelectedDoctor(null);
+                  }}
                   className={`p-6 rounded-2xl border-2 text-left transition-all ${
                     selectedHospital?.id === hospital.id
                       ? 'border-teal-500 bg-teal-50 shadow-lg transform scale-105'
@@ -314,10 +542,188 @@ You will receive a confirmation SMS and email shortly.
           </div>
         )}
 
+        {/* Available Doctors Panel - Shows after hospital selection */}
+        {appointmentType === 'physical' && selectedHospital && showDoctorList && (
+          <div className="bg-white rounded-3xl p-8 shadow-xl mb-8 transition-all duration-500 animate-fadeIn" style={{
+            animation: 'slideDown 0.5s ease-out'
+          }}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-800" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                Available Doctors at {selectedHospital.name}
+              </h3>
+              <span className="text-sm text-gray-500">{doctors.length} doctors available</span>
+            </div>
+
+            {/* Filters */}
+            <div className="mb-6 pb-6 border-b border-gray-200">
+              <p className="text-sm font-semibold text-gray-700 mb-3">Filter by:</p>
+              <div className="flex flex-wrap gap-3">
+                {/* Specialization Filter */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setSpecializationFilter('all')}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      specializationFilter === 'all'
+                        ? 'bg-teal-500 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    All Specialties
+                  </button>
+                  <button
+                    onClick={() => setSpecializationFilter('cardiologist')}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      specializationFilter === 'cardiologist'
+                        ? 'bg-teal-500 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Cardiologist
+                  </button>
+                  <button
+                    onClick={() => setSpecializationFilter('pediatrician')}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      specializationFilter === 'pediatrician'
+                        ? 'bg-teal-500 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    Pediatrician
+                  </button>
+                  <button
+                    onClick={() => setSpecializationFilter('general')}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      specializationFilter === 'general'
+                        ? 'bg-teal-500 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    General Physician
+                  </button>
+                </div>
+
+                {/* Availability Filter */}
+                <button
+                  onClick={() => setAvailabilityFilter(availabilityFilter === 'today' ? 'all' : 'today')}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    availabilityFilter === 'today'
+                      ? 'bg-cyan-500 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  Available Today
+                </button>
+
+                {/* Gender Filter */}
+                <button
+                  onClick={() => setGenderFilter(genderFilter === 'female' ? 'all' : 'female')}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    genderFilter === 'female'
+                      ? 'bg-teal-500 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  Female Doctors
+                </button>
+
+                {/* Language Filter */}
+                <button
+                  onClick={() => setLanguageFilter(languageFilter === 'hindi' ? 'all' : 'hindi')}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    languageFilter === 'hindi'
+                      ? 'bg-teal-500 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  Hindi Speaking
+                </button>
+              </div>
+            </div>
+
+            {/* Doctor Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-2">
+              {doctors
+                .filter(doctor => {
+                  if (specializationFilter === 'all') return true;
+                  return doctor.specialization.toLowerCase().includes(specializationFilter);
+                })
+                .map((doctor) => (
+                <button
+                  key={doctor.id}
+                  onClick={() => setSelectedDoctor(doctor)}
+                  className={`p-5 rounded-2xl border-2 text-left transition-all hover:shadow-lg hover:-translate-y-1 ${
+                    selectedDoctor?.id === doctor.id
+                      ? 'border-teal-500 bg-teal-50 shadow-lg'
+                      : 'border-gray-200 hover:border-teal-300 bg-white'
+                  }`}
+                  style={{
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  {/* Doctor Header */}
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-white text-lg font-bold flex-shrink-0">
+                      {doctor.avatar}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-lg font-bold text-gray-800 mb-1" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                        {doctor.name}
+                      </h4>
+                      <p className="text-sm text-teal-600 font-semibold mb-1">{doctor.specialization}</p>
+                      <p className="text-xs text-gray-500">{doctor.experience} years experience</p>
+                    </div>
+                    {selectedDoctor?.id === doctor.id && (
+                      <svg className="w-6 h-6 text-teal-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" style={{
+                        animation: 'fadeIn 0.3s ease-in'
+                      }}>
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                      </svg>
+                    )}
+                  </div>
+
+                  {/* Rating & Patients */}
+                  <div className="flex items-center gap-4 mb-3 text-xs text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <span className="text-yellow-500">★</span>
+                      <span className="font-semibold">{doctor.rating}</span>
+                    </div>
+                    <span>•</span>
+                    <span>{doctor.patients}+ patients</span>
+                  </div>
+
+                  {/* Consultation Modes */}
+                  <div className="flex gap-2 mb-3">
+                    <span className="flex items-center gap-1 bg-teal-50 text-teal-700 px-2 py-1 rounded-full text-xs font-medium">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                      </svg>
+                      Physical
+                    </span>
+                    <span className="flex items-center gap-1 bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full text-xs font-medium">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                      </svg>
+                      Virtual
+                    </span>
+                  </div>
+
+                  {/* Fee Range */}
+                  <div className="pt-3 border-t border-gray-200">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-600">Consultation Fee</span>
+                      <span className="text-base font-bold text-teal-600">₹{doctor.physicalFee} - ₹{doctor.virtualFee}</span>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Date and Time Selection */}
         <div className="bg-white rounded-3xl p-8 shadow-xl mb-8">
           <h3 className="text-2xl font-bold text-gray-800 mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
-            {appointmentType === 'physical' ? 'Step 3' : 'Step 2'}: Select Date & Time
+            {appointmentType === 'physical' ? 'Step 4' : 'Step 3'}: Select Date & Time
           </h3>
           
           {/* Date Selection */}
@@ -379,7 +785,7 @@ You will receive a confirmation SMS and email shortly.
         {/* Reason for Visit */}
         <div className="bg-white rounded-3xl p-8 shadow-xl mb-8">
           <h3 className="text-2xl font-bold text-gray-800 mb-4" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
-            {appointmentType === 'physical' ? 'Step 4' : 'Step 3'}: Reason for Visit (Optional)
+            {appointmentType === 'physical' ? 'Step 5' : 'Step 4'}: Reason for Visit (Optional)
           </h3>
           <textarea
             value={reasonForVisit}
@@ -392,6 +798,7 @@ You will receive a confirmation SMS and email shortly.
       </div>
 
       {/* Sticky Summary Panel */}
+      {selectedDoctor && (
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t-4 border-teal-500 shadow-2xl p-6 z-50">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
           <div className="flex-1">
@@ -424,6 +831,7 @@ You will receive a confirmation SMS and email shortly.
           </button>
         </div>
       </div>
+      )}
     </div>
   );
 }

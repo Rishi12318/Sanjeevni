@@ -29,6 +29,7 @@ export default function PatientDashboard() {
   const [showChatbot, setShowChatbot] = useState(false);
   const [chatMessages, setChatMessages] = useState<Array<{text: string, sender: 'user' | 'bot'}>>([]);
   const [chatInput, setChatInput] = useState('');
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'appointments' | 'chatbot' | 'medicine'>('dashboard');
 
   const healthMetrics: HealthMetric[] = [
     {
@@ -114,7 +115,7 @@ export default function PatientDashboard() {
   };
 
   const openMedicineMatrix = () => {
-    router.push('/medicine-matrix');
+    setActiveSection('medicine');
   };
 
   const handleSendMessage = () => {
@@ -143,29 +144,69 @@ export default function PatientDashboard() {
         </div>
 
         <nav className="p-4 space-y-2">
-          <a href="/dashboard/patient" className="flex items-center gap-3 px-4 py-3 bg-teal-50 text-teal-600 rounded-xl font-medium">
+          <button 
+            onClick={() => setActiveSection('dashboard')} 
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all w-full text-left relative overflow-hidden group cursor-pointer ${
+              activeSection === 'dashboard' 
+                ? 'bg-teal-50 text-teal-600 shadow-sm' 
+                : 'text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            {activeSection === 'dashboard' && (
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-teal-600 rounded-r"></div>
+            )}
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
-            Dashboard
-          </a>
-          <button onClick={() => setShowDoctors(true)} className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors w-full">
+            <span>Dashboard</span>
+          </button>
+          <button 
+            onClick={() => setActiveSection('appointments')} 
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all w-full text-left relative overflow-hidden group cursor-pointer ${
+              activeSection === 'appointments' 
+                ? 'bg-teal-50 text-teal-600 shadow-sm' 
+                : 'text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            {activeSection === 'appointments' && (
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-teal-600 rounded-r"></div>
+            )}
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
-            Appointments
+            <span>Appointments</span>
           </button>
-          <button onClick={() => setShowChatbot(!showChatbot)} className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors w-full">
+          <button 
+            onClick={() => setActiveSection('chatbot')} 
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all w-full text-left relative overflow-hidden group cursor-pointer ${
+              activeSection === 'chatbot' 
+                ? 'bg-teal-50 text-teal-600 shadow-sm' 
+                : 'text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            {activeSection === 'chatbot' && (
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-teal-600 rounded-r"></div>
+            )}
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
             </svg>
-            AI Chatbot
+            <span>AI Chatbot</span>
           </button>
-          <button onClick={openMedicineMatrix} className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-colors w-full">
+          <button 
+            onClick={() => setActiveSection('medicine')} 
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all w-full text-left relative overflow-hidden group cursor-pointer ${
+              activeSection === 'medicine' 
+                ? 'bg-teal-50 text-teal-600 shadow-sm' 
+                : 'text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            {activeSection === 'medicine' && (
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-teal-600 rounded-r"></div>
+            )}
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
             </svg>
-            Medicine Matrix
+            <span>Medicine Matrix</span>
           </button>
         </nav>
 
@@ -198,7 +239,9 @@ export default function PatientDashboard() {
           </div>
         </div>
 
+        {/* Conditional Content Based on Active Section */}
         {/* Dashboard Content */}
+        {activeSection === 'dashboard' && (
         <div className="p-8 space-y-8">
           {/* Welcome Section */}
           <div className="text-center">
@@ -576,7 +619,7 @@ export default function PatientDashboard() {
                   <div className="mt-4 space-y-2 text-xs w-full">
                     <div className="flex items-center justify-between rounded-lg p-2" style={{background: 'rgba(20, 184, 166, 0.15)'}}>
                       <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+                        <div className="w-3 h-3 bg-cyan-500 rounded-full"></div>
                         <span className="text-teal-800 font-medium">Physical</span>
                       </div>
                       <span className="font-bold text-teal-800">78.2%</span>
@@ -1124,6 +1167,429 @@ export default function PatientDashboard() {
             </div>
           </div>
         </div>
+        )}
+
+        {/* Appointments Section */}
+        {activeSection === 'appointments' && (
+        <div className="p-8 space-y-6">
+          <div className="text-center mb-8">
+            <h1 className="text-5xl font-bold text-gray-800 mb-2" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+              Your Appointments
+            </h1>
+            <p className="text-gray-600">Manage your doctor consultations</p>
+          </div>
+
+          {/* Book New Appointment Button */}
+          <div className="rounded-3xl p-8 text-center" style={{
+            background: 'linear-gradient(135deg, rgba(20, 184, 166, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%)',
+            border: '2px dashed rgba(20, 184, 166, 0.4)',
+          }}>
+            <svg className="w-16 h-16 mx-auto mb-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">Book New Appointment</h3>
+            <p className="text-gray-600 mb-4">Schedule a consultation with our doctors</p>
+            <button 
+              onClick={() => router.push('/appointments/book')}
+              className="px-8 py-4 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-xl font-semibold hover:shadow-xl transition-all"
+            >
+              Browse Doctors & Book Now
+            </button>
+          </div>
+
+          {/* Upcoming Appointments */}
+          <div className="rounded-3xl p-8" style={{
+            background: 'rgba(255, 255, 255, 0.35)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid rgba(20, 184, 166, 0.25)',
+            boxShadow: '0 12px 40px rgba(20, 184, 166, 0.08)',
+          }}>
+            <h3 className="text-2xl font-bold text-gray-800 mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>Upcoming Consultations</h3>
+            <div className="space-y-4">
+              {/* Sample Appointment 1 */}
+              <div className="bg-white/60 rounded-2xl p-6 border border-teal-200/50 hover:shadow-lg transition-all">
+                <div className="flex items-start justify-between">
+                  <div className="flex gap-4">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-white text-xl font-bold">
+                      SJ
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-gray-800">Dr. Sarah Johnson</h4>
+                      <p className="text-sm text-teal-600 font-semibold">Cardiologist</p>
+                      <div className="flex items-center gap-3 mt-2 text-sm text-gray-600">
+                        <span className="flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                          </svg>
+                          January 22, 2026
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                          10:00 AM
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-xs font-semibold">Physical</span>
+                </div>
+                <div className="mt-4 pt-4 border-t border-gray-200/50 flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Apollo Hospital, Jubilee Hills</span>
+                  <div className="flex gap-2">
+                    <button className="px-4 py-2 text-teal-600 hover:bg-teal-50 rounded-lg text-sm font-semibold transition-all">View Details</button>
+                    <button className="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-sm font-semibold transition-all">Cancel</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sample Appointment 2 */}
+              <div className="bg-white/60 rounded-2xl p-6 border border-cyan-200/50 hover:shadow-lg transition-all">
+                <div className="flex items-start justify-between">
+                  <div className="flex gap-4">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white text-xl font-bold">
+                      MC
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-bold text-gray-800">Dr. Michael Chen</h4>
+                      <p className="text-sm text-cyan-600 font-semibold">General Physician</p>
+                      <div className="flex items-center gap-3 mt-2 text-sm text-gray-600">
+                        <span className="flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                          </svg>
+                          January 24, 2026
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                          2:00 PM
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="bg-cyan-100 text-cyan-700 px-3 py-1 rounded-full text-xs font-semibold">Virtual</span>
+                </div>
+                <div className="mt-4 pt-4 border-t border-gray-200/50 flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Video Consultation</span>
+                  <div className="flex gap-2">
+                    <button className="px-4 py-2 text-cyan-600 hover:bg-cyan-50 rounded-lg text-sm font-semibold transition-all">Join Call</button>
+                    <button className="px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-sm font-semibold transition-all">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Past Consultations */}
+          <div className="rounded-3xl p-8" style={{
+            background: 'rgba(255, 255, 255, 0.25)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1.5px solid rgba(156, 163, 175, 0.3)',
+          }}>
+            <h3 className="text-2xl font-bold text-gray-800 mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>Past Consultations</h3>
+            <div className="space-y-3">
+              <div className="bg-white/40 rounded-xl p-4 flex justify-between items-center hover:bg-white/60 transition-all">
+                <div>
+                  <p className="font-semibold text-gray-800">Dr. Emily Rodriguez - Dermatologist</p>
+                  <p className="text-sm text-gray-600">January 15, 2026</p>
+                </div>
+                <button className="text-teal-600 hover:text-teal-700 text-sm font-semibold">View Report</button>
+              </div>
+              <div className="bg-white/40 rounded-xl p-4 flex justify-between items-center hover:bg-white/60 transition-all">
+                <div>
+                  <p className="font-semibold text-gray-800">Dr. Rajesh Kumar - Orthopedic</p>
+                  <p className="text-sm text-gray-600">January 10, 2026</p>
+                </div>
+                <button className="text-teal-600 hover:text-teal-700 text-sm font-semibold">View Report</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Filters Section */}
+          <div className="rounded-3xl p-6" style={{
+            background: 'rgba(255, 255, 255, 0.35)',
+            border: '1.5px solid rgba(20, 184, 166, 0.2)',
+          }}>
+            <h4 className="text-lg font-bold text-gray-800 mb-4">Filter Appointments</h4>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <select className="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none">
+                <option>All Types</option>
+                <option>Physical</option>
+                <option>Virtual</option>
+              </select>
+              <select className="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none">
+                <option>All Specialties</option>
+                <option>Cardiologist</option>
+                <option>General Physician</option>
+                <option>Dermatologist</option>
+              </select>
+              <select className="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none">
+                <option>All Hospitals</option>
+                <option>Apollo Hospital</option>
+                <option>Yashoda Hospital</option>
+                <option>CARE Hospital</option>
+              </select>
+              <input 
+                type="date" 
+                className="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none"
+              />
+            </div>
+          </div>
+        </div>
+        )}
+
+        {/* AI Chatbot Section */}
+        {activeSection === 'chatbot' && (
+        <div className="p-8 h-[calc(100vh-200px)]">
+          <div className="max-w-4xl mx-auto h-full flex flex-col">
+            <div className="text-center mb-6">
+              <h1 className="text-5xl font-bold text-gray-800 mb-2" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+                AI Health Assistant
+              </h1>
+              <p className="text-gray-600">Your 24/7 medical support companion</p>
+            </div>
+
+            <div className="flex-1 rounded-3xl p-8 flex flex-col" style={{
+              background: 'rgba(255, 255, 255, 0.35)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: '1.5px solid rgba(6, 182, 212, 0.25)',
+              boxShadow: '0 12px 40px rgba(6, 182, 212, 0.08)',
+            }}>
+              {/* Welcome Message */}
+              <div className="mb-6">
+                <div className="bg-gradient-to-r from-cyan-500 to-teal-500 text-white p-6 rounded-2xl">
+                  <h3 className="text-2xl font-bold mb-2">👋 Hello! How can I help you today?</h3>
+                  <p className="text-cyan-50">I can help you with symptoms, health insights, finding doctors, and booking appointments.</p>
+                </div>
+              </div>
+
+              {/* Quick Action Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <button className="bg-white/60 p-4 rounded-xl border border-teal-200/50 hover:shadow-lg transition-all text-left">
+                  <div className="flex items-start gap-3">
+                    <span className="text-3xl">🩺</span>
+                    <div>
+                      <h4 className="font-bold text-gray-800">Check Symptoms</h4>
+                      <p className="text-sm text-gray-600">Describe what you're feeling</p>
+                    </div>
+                  </div>
+                </button>
+                <button className="bg-white/60 p-4 rounded-xl border border-cyan-200/50 hover:shadow-lg transition-all text-left">
+                  <div className="flex items-start gap-3">
+                    <span className="text-3xl">📊</span>
+                    <div>
+                      <h4 className="font-bold text-gray-800">Understand Health Score</h4>
+                      <p className="text-sm text-gray-600">Explain my metrics</p>
+                    </div>
+                  </div>
+                </button>
+                <button 
+                  onClick={() => router.push('/appointments/book')}
+                  className="bg-white/60 p-4 rounded-xl border border-teal-200/50 hover:shadow-lg transition-all text-left"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-3xl">👨‍⚕️</span>
+                    <div>
+                      <h4 className="font-bold text-gray-800">Find a Doctor</h4>
+                      <p className="text-sm text-gray-600">Get specialist recommendations</p>
+                    </div>
+                  </div>
+                </button>
+                <button 
+                  onClick={() => router.push('/appointments/book')}
+                  className="bg-white/60 p-4 rounded-xl border border-cyan-200/50 hover:shadow-lg transition-all text-left"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-3xl">📅</span>
+                    <div>
+                      <h4 className="font-bold text-gray-800">Book Appointment</h4>
+                      <p className="text-sm text-gray-600">Schedule a consultation</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Chat Messages Area */}
+              <div className="flex-1 bg-white/40 rounded-xl p-4 mb-4 overflow-y-auto">
+                {chatMessages.length === 0 ? (
+                  <div className="text-center text-gray-500 mt-8">
+                    <p className="text-sm italic">Start a conversation by selecting an option above or typing below...</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {chatMessages.map((msg, idx) => (
+                      <div key={idx} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`max-w-[70%] p-3 rounded-2xl ${
+                          msg.sender === 'user' 
+                            ? 'bg-teal-500 text-white' 
+                            : 'bg-white border border-gray-200 text-gray-800'
+                        }`}>
+                          {msg.text}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Chat Input */}
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Type your health question..."
+                  className="flex-1 px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-cyan-500 outline-none"
+                />
+                <button 
+                  onClick={handleSendMessage}
+                  className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        )}
+
+        {/* Medicine Matrix Section */}
+        {activeSection === 'medicine' && (
+        <div className="p-8 space-y-6">
+          <div className="text-center mb-8">
+            <h1 className="text-5xl font-bold text-gray-800 mb-2" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+              Medicine Matrix
+            </h1>
+            <p className="text-gray-600">Find medicines and nearby pharmacies</p>
+          </div>
+
+          {/* Medicine Search */}
+          <div className="rounded-3xl p-8" style={{
+            background: 'rgba(255, 255, 255, 0.35)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid rgba(16, 185, 129, 0.25)',
+            boxShadow: '0 12px 40px rgba(16, 185, 129, 0.08)',
+          }}>
+            <h3 className="text-2xl font-bold text-gray-800 mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>Search Medicines</h3>
+            <div className="flex gap-3 mb-6">
+              <input
+                type="text"
+                value={medicineQuery}
+                onChange={(e) => setMedicineQuery(e.target.value)}
+                placeholder="Search medicine name, condition, or symptom..."
+                className="flex-1 px-6 py-4 rounded-xl border-2 border-emerald-200 focus:ring-2 focus:ring-emerald-500 outline-none text-lg"
+              />
+              <button className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl font-semibold hover:shadow-xl transition-all">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </button>
+            </div>
+
+            {/* Sample Medicine Results */}
+            {medicineQuery && (
+              <div className="space-y-3">
+                <div className="bg-white/60 rounded-xl p-5 border border-emerald-200/50 hover:shadow-lg transition-all">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="text-lg font-bold text-gray-800">Paracetamol 500mg</h4>
+                      <p className="text-sm text-emerald-600 font-semibold">Pain Relief, Fever Reducer</p>
+                      <p className="text-sm text-gray-600 mt-2">Available at 12 nearby pharmacies</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-emerald-600">₹45</p>
+                      <p className="text-xs text-gray-500">10 tablets</p>
+                    </div>
+                  </div>
+                  <button className="mt-4 w-full bg-cyan-500 text-white py-2 rounded-lg font-semibold hover:bg-cyan-600 transition-all">
+                    View Pharmacies
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Nearby Pharmacies */}
+          <div className="rounded-3xl p-8" style={{
+            background: 'rgba(255, 255, 255, 0.35)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1.5px solid rgba(16, 185, 129, 0.25)',
+          }}>
+            <h3 className="text-2xl font-bold text-gray-800 mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>Nearby Pharmacies</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white/60 rounded-xl p-5 border border-emerald-200/50">
+                <h4 className="font-bold text-gray-800">Apollo Pharmacy</h4>
+                <p className="text-sm text-gray-600">Jubilee Hills • 1.2 km away</p>
+                <p className="text-xs text-emerald-600 font-semibold mt-2">⏰ Open 24/7</p>
+                <button className="mt-3 text-emerald-600 text-sm font-semibold hover:underline">Get Directions →</button>
+              </div>
+              <div className="bg-white/60 rounded-xl p-5 border border-emerald-200/50">
+                <h4 className="font-bold text-gray-800">MedPlus Pharmacy</h4>
+                <p className="text-sm text-gray-600">Banjara Hills • 2.5 km away</p>
+                <p className="text-xs text-emerald-600 font-semibold mt-2">⏰ Open till 11 PM</p>
+                <button className="mt-3 text-emerald-600 text-sm font-semibold hover:underline">Get Directions →</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Previous Prescriptions */}
+          <div className="rounded-3xl p-8" style={{
+            background: 'rgba(255, 255, 255, 0.25)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1.5px solid rgba(156, 163, 175, 0.3)',
+          }}>
+            <h3 className="text-2xl font-bold text-gray-800 mb-6" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>Repeat Prescriptions</h3>
+            <div className="space-y-3">
+              <div className="bg-white/40 rounded-xl p-4 flex justify-between items-center hover:bg-white/60 transition-all">
+                <div>
+                  <p className="font-semibold text-gray-800">Blood Pressure Medication</p>
+                  <p className="text-sm text-gray-600">Prescribed by Dr. Sarah Johnson • Jan 15</p>
+                </div>
+                <button className="bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-600">
+                  Reorder
+                </button>
+              </div>
+              <div className="bg-white/40 rounded-xl p-4 flex justify-between items-center hover:bg-white/60 transition-all">
+                <div>
+                  <p className="font-semibold text-gray-800">Vitamin D Supplements</p>
+                  <p className="text-sm text-gray-600">Prescribed by Dr. Michael Chen • Jan 10</p>
+                </div>
+                <button className="bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-600">
+                  Reorder
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* AI Medicine Guidance */}
+          <div className="rounded-3xl p-8 text-center" style={{
+            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(20, 184, 166, 0.08) 100%)',
+            border: '1.5px solid rgba(16, 185, 129, 0.3)',
+          }}>
+            <svg className="w-16 h-16 mx-auto mb-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">Need Medicine Guidance?</h3>
+            <p className="text-gray-600 mb-4">Ask our AI about medicine usage, interactions, and precautions</p>
+            <button 
+              onClick={() => setActiveSection('chatbot')}
+              className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl font-semibold hover:shadow-xl transition-all"
+            >
+              Ask AI Assistant
+            </button>
+          </div>
+        </div>
+        )}
+
       </main>
     </div>
   );
