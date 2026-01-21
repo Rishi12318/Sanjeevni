@@ -507,55 +507,165 @@ export default function Home() {
         `}</style>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Features</h2>
-            <p className="text-gray-600 text-lg">Discover what makes Sanjeevni AI special</p>
+      {/* Features Section - Redesigned */}
+      <section className="py-24 px-4 bg-gradient-to-b from-white via-teal-50/30 to-white relative overflow-hidden">
+        {/* Subtle background pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 2px 2px, #14b8a6 1px, transparent 0)',
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Header with system explanation */}
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-bold text-gray-900 mb-3" style={{ fontFamily: 'Georgia, serif' }}>
+              Our Features
+            </h2>
+            <p className="text-gray-600 text-lg mb-2">
+              Discover what makes Sanjeevni AI special
+            </p>
+            <p className="text-teal-600 italic text-sm max-w-2xl mx-auto" style={{ fontFamily: 'Georgia, serif' }}>
+              An integrated healthcare ecosystem where AI diagnostics, secure records, and expert consultation work seamlessly together
+            </p>
           </div>
-          
-          <div className="relative">
-            <button 
-              onClick={() => scrollFeatures('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-3 rounded-full shadow-lg hover:bg-teal-50 transition-colors"
-              aria-label="Scroll left"
-            >
-              <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-              </svg>
-            </button>
 
-            <div 
-              ref={featuresRef}
-              className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-12"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {features.map((feature, index) => (
+          {/* Feature tabs navigation */}
+          <div className="flex justify-center mb-12 gap-3 flex-wrap">
+            {features.map((feature, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  const element = document.getElementById(`feature-${index}`);
+                  element?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }}
+                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                  index === 0 
+                    ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/30' 
+                    : 'bg-white/60 text-teal-700 hover:bg-teal-50 border border-teal-200/50'
+                }`}
+              >
+                {feature.title}
+              </button>
+            ))}
+          </div>
+
+          {/* Features showcase with central narrative */}
+          <div 
+            ref={featuresRef}
+            className="flex gap-8 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-8 px-4"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {features.map((feature, index) => (
+              <div 
+                key={index}
+                id={`feature-${index}`}
+                className="group relative snap-center min-w-[380px] transition-all duration-500"
+              >
+                {/* Glassmorphism card */}
                 <div 
-                  key={index}
-                  className="bg-white rounded-3xl p-8 shadow-xl min-w-[350px] snap-center border-2 border-teal-50 hover:border-teal-200 transition-all hover:scale-105"
+                  className="relative rounded-3xl p-8 backdrop-blur-xl bg-white/70 border border-teal-100/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 h-full"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(224,247,250,0.6) 100%)',
+                    boxShadow: '0 8px 32px rgba(20,184,166,0.08)'
+                  }}
                 >
-                  <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mb-4">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-3">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
-                </div>
-              ))}
-            </div>
+                  {/* Gradient border effect */}
+                  <div 
+                    className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(20,184,166,0.2) 0%, rgba(6,182,212,0.2) 100%)',
+                      padding: '2px',
+                      WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                      WebkitMaskComposite: 'xor',
+                      maskComposite: 'exclude'
+                    }}
+                  />
 
-            <button 
-              onClick={() => scrollFeatures('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white p-3 rounded-full shadow-lg hover:bg-teal-50 transition-colors"
-              aria-label="Scroll right"
-            >
-              <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </button>
+                  {/* Icon with subtle animation */}
+                  <div className="relative mb-6">
+                    <div 
+                      className="w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(20,184,166,0.12) 0%, rgba(178,235,242,0.12) 100%)',
+                        backdropFilter: 'blur(10px)'
+                      }}
+                    >
+                      <div className="opacity-70 group-hover:opacity-100 transition-opacity duration-500">
+                        {feature.icon}
+                      </div>
+                    </div>
+                    {/* Indicator dot for active feature */}
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-teal-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+                  </div>
+
+                  {/* Title */}
+                  <h3 
+                    className="text-2xl font-bold text-gray-900 mb-3 transition-colors duration-300 group-hover:text-teal-700"
+                    style={{ fontFamily: 'Georgia, serif' }}
+                  >
+                    {feature.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-gray-600 leading-relaxed mb-4">
+                    {feature.description}
+                  </p>
+
+                  {/* Expandable use case - appears on hover */}
+                  <div className="overflow-hidden transition-all duration-500 max-h-0 group-hover:max-h-24">
+                    <div className="pt-4 border-t border-teal-100/50 mt-2">
+                      <p className="text-sm text-teal-700 italic" style={{ fontFamily: 'Georgia, serif' }}>
+                        {index === 0 && "Used during doctor consultations and NGO health camps for instant symptom analysis"}
+                        {index === 1 && "Seamlessly integrated across all touchpoints—appointments, prescriptions, and follow-ups"}
+                        {index === 2 && "Connecting patients with verified healthcare professionals in under 2 minutes"}
+                        {index === 3 && "Ensuring continuous care with automated reminders and instant emergency support"}
+                        {index === 4 && "Bank-grade encryption protecting sensitive health information across all transactions"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Subtle elevation indicator */}
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-transparent via-teal-400/40 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Progress indicators */}
+          <div className="flex justify-center gap-2 mt-8">
+            {features.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  const element = document.getElementById(`feature-${index}`);
+                  element?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }}
+                className="w-2 h-2 rounded-full bg-teal-200 hover:bg-teal-400 transition-all duration-300"
+                aria-label={`Go to feature ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
+
+        {/* Keyframe animations */}
+        <style jsx>{`
+          @keyframes fadeInElevate {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
       </section>
 
       {/* About Us Section */}
