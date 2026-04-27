@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SanjeevniAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#68B56F',
+                        secondary: '#C2E9BF',
+                        olive: '#66CDAA',
+                        oliveLight: '#7DD9B8'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-secondary via-white to-secondary min-h-screen flex items-center justify-center px-4">
+    <div class="max-w-md w-full">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center mb-4">
+                <svg class="h-16 w-16 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Welcome Back</h1>
+            <p class="text-gray-600">Login to your SanjeevniAI account</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8">
+            <!-- Role Selection -->
+            <div class="mb-6">
+                <label class="block text-gray-700 font-semibold mb-3">Login as</label>
+                <div class="grid grid-cols-3 gap-3">
+                    <button type="button" onclick="selectRole('user')" class="role-btn px-4 py-3 border-2 border-gray-300 rounded-lg hover:border-olive hover:bg-secondary/20 transition font-semibold" data-role="user">
+                        Patient
+                    </button>
+                    <button type="button" onclick="selectRole('doctor')" class="role-btn px-4 py-3 border-2 border-gray-300 rounded-lg hover:border-olive hover:bg-secondary/20 transition font-semibold" data-role="doctor">
+                        Doctor
+                    </button>
+                    <button type="button" onclick="selectRole('ngo')" class="role-btn px-4 py-3 border-2 border-gray-300 rounded-lg hover:border-olive hover:bg-secondary/20 transition font-semibold" data-role="ngo">
+                        NGO
+                    </button>
+                </div>
+            </div>
+
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Email Address</label>
+                    <input type="email" id="email" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-olive focus:outline-none transition" placeholder="your@email.com">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Password</label>
+                    <input type="password" id="password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-olive focus:outline-none transition" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="w-4 h-4 text-olive border-gray-300 rounded focus:ring-primary">
+                        <span class="ml-2 text-sm text-gray-700">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-olive hover:text-green-700 font-semibold">Forgot password?</a>
+                </div>
+
+                <div id="message" class="hidden p-4 rounded-lg"></div>
+
+                <button type="submit" class="w-full bg-olive hover:bg-oliveLight text-white py-4 rounded-lg text-lg font-semibold transition shadow-lg transform hover:scale-105">
+                    Login
+                </button>
+
+                <div class="text-center text-gray-600">
+                    Don't have an account? 
+                    <a href="/signup.html" class="text-olive hover:text-green-700 font-semibold">Sign up free</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="text-center mt-6">
+            <a href="/" class="text-gray-600 hover:text-olive transition flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back to Homepage
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let selectedRole = 'user';
+
+        function selectRole(role) {
+            selectedRole = role;
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                if (btn.dataset.role === role) {
+                    btn.classList.add('border-olive', 'bg-secondary/30', 'text-olive');
+                    btn.classList.remove('border-gray-300');
+                } else {
+                    btn.classList.remove('border-olive', 'bg-secondary/30', 'text-olive');
+                    btn.classList.add('border-gray-300');
+                }
+            });
+        }
+
+        function showMessage(text, isError = false) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `p-4 rounded-lg ${isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+            messageEl.classList.remove('hidden');
+        }
+
+        function hideMessage() {
+            document.getElementById('message').classList.add('hidden');
+        }
+
+        // Set default role
+        selectRole('user');
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideMessage();
+
+            const credentials = {
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                const response = await fetch(`/api/auth/login/${selectedRole}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(credentials)
+                });
+
+                const data = await response.json();
+
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userRole', selectedRole);
+                    localStorage.setItem('userId', data[selectedRole]._id);
+                    localStorage.setItem('userName', data[selectedRole].personalDetails?.firstName || data[selectedRole].organizationDetails?.name || 'User');
+                    
+                    showMessage('Login successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = '/dashboard.html';
+                    }, 1500);
+                } else {
+                    showMessage(data.message || 'Invalid email or password', true);
+                }
+            } catch (error) {
+                showMessage('Error connecting to server. Please try again.', true);
+            }
+        });
+    </script>
+</body>
+</html>
