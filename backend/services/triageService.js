@@ -3,7 +3,8 @@ const { v4: uuidv4 } = require('uuid');
 const db = require('../db/db');
 const { evaluateSymptoms } = require('../utils/ruleEngine');
 
-const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
+const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3:latest';
 
 function safeJsonParse(raw) {
   try {
@@ -53,26 +54,17 @@ async function triage(inputText) {
     return { id, response, source: 'rules' };
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    const response = normalizeResult({
-      severity: 'unknown',
-      possible_conditions: [],
-      advice: 'AI service is not configured. Set OPENAI_API_KEY.'
-    });
-    await saveLog({ id, inputText, response });
-    return { id, response, source: 'fallback' };
-  }
-
-  const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
-
   let contentText = '';
   try {
     const completion = await axios.post(
-      OPENAI_URL,
+      `${OLLAMA_URL.replace(/\/$/, '')}/api/chat`,
       {
-        model,
-        temperature: 0.2,
+        model: OLLAMA_MODEL,
+        stream: false,
+        options: {
+          temperature: 0.2,
+          num_predict: 256
+        },
         messages: [
           {
             role: 'system',
@@ -85,19 +77,16 @@ async function triage(inputText) {
         ]
       },
       {
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        timeout: 20_000
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 60_000
       }
     );
 
-    contentText = completion?.data?.choices?.[0]?.message?.content || '';
+    contentText = completion?.data?.message?.content || completion?.data?.response || '';
   } catch (err) {
     const status = err?.response?.status;
     const body = err?.response?.data;
-    console.error('OpenAI request failed:', status || '', body || err?.message || err);
+    console.error('Ollama request failed:', status || '', body || err?.message || err);
     const response = normalizeResult({
       severity: 'unknown',
       possible_conditions: [],
@@ -117,7 +106,7 @@ async function triage(inputText) {
       });
 
   await saveLog({ id, inputText, response });
-  return { id, response, source: parsed.ok ? 'openai' : 'openai_invalid_json' };
+  return { id, response, source: parsed.ok ? 'ollama' : 'ollama_invalid_json' };
 }
 
 async function getHistory(limit = 25) {

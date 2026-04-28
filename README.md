@@ -2,6 +2,8 @@
 
 Node.js application that connects to MongoDB database `progome` at `mongodb://localhost:27017/progome`.
 
+The Sanjeevni UI and API now run together on `http://localhost:5050`.
+
 ## Quick Start
 
 ### 1. Install Dependencies

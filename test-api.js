@@ -1,7 +1,7 @@
 // test-api.js - Test the backend API endpoints
 const axios = require('axios');
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = 'http://localhost:5050/api';
 
 console.log('🧪 Testing Sanjeevni Backend API...\n');
 
@@ -200,7 +200,7 @@ async function runAllTests() {
   console.log('═══════════════════════════════════════════════════════');
   console.log('✨ API Testing Complete!\n');
   console.log('📱 Your backend is ready for the iOS app!');
-  console.log('🔗 Backend running on: http://localhost:3000');
+  console.log('🔗 Backend running on: http://localhost:5050');
   console.log('\n⚠️  Note: To run the iOS app, you need a Mac with Xcode.');
   console.log('   Follow the steps in IOS_INTEGRATION_GUIDE.md');
   console.log('═══════════════════════════════════════════════════════\n');

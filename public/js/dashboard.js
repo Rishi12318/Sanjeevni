@@ -148,6 +148,26 @@ function handleChatKeyPress(event) {
     }
 }
 
+function formatTriageReply(triageData) {
+    if (!triageData) {
+        return '';
+    }
+
+    const severity = String(triageData.severity || 'unknown');
+    const conditions = Array.isArray(triageData.possible_conditions) ? triageData.possible_conditions : [];
+    const advice = String(triageData.advice || '').trim();
+
+    const lines = [];
+    lines.push('Triage Summary');
+    lines.push(`Severity: ${severity}`);
+    lines.push(`Possible conditions: ${conditions.length ? conditions.join(', ') : 'Not enough data'}`);
+    if (advice) {
+        lines.push(`Triage advice: ${advice}`);
+    }
+
+    return lines.join('\n');
+}
+
 async function sendMessage() {
     const input = document.getElementById('chatInput');
     const message = input.value.trim();
@@ -163,7 +183,26 @@ async function sendMessage() {
     typingIndicator.classList.add('active');
 
     try {
-        // Call Gemini AI API with health context
+        // Call triage endpoint so chatbot replies include severity and likely conditions.
+        let triageReply = '';
+        try {
+            const triageResp = await fetch('/api/triage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: message })
+            });
+
+            if (triageResp.ok) {
+                const triageData = await triageResp.json();
+                triageReply = formatTriageReply(triageData);
+            }
+        } catch (triageError) {
+            console.error('Triage fetch error:', triageError);
+        }
+
+        // Existing AI API call (if available in this deployment)
         const healthScores = JSON.parse(localStorage.getItem('healthScores') || '{}');
         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
         
@@ -189,13 +228,40 @@ async function sendMessage() {
         typingIndicator.classList.remove('active');
 
         if (data.success && data.data) {
-            addMessageToChat('ai', data.data.response || data.data);
+            const aiText = data.data.response || String(data.data);
+            const finalReply = triageReply ? `${triageReply}\n\nAI Assistant:\n${aiText}` : aiText;
+            addMessageToChat('ai', finalReply);
         } else {
-            addMessageToChat('ai', 'Sorry, I encountered an error. Please try again.');
+            if (triageReply) {
+                addMessageToChat('ai', triageReply);
+            } else {
+                addMessageToChat('ai', 'Sorry, I encountered an error. Please try again.');
+            }
         }
     } catch (error) {
         console.error('Chat error:', error);
         typingIndicator.classList.remove('active');
+
+        // If chat endpoint is unavailable, still provide triage-guided reply.
+        try {
+            const triageResp = await fetch('/api/triage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: message })
+            });
+
+            if (triageResp.ok) {
+                const triageData = await triageResp.json();
+                const triageReply = formatTriageReply(triageData);
+                addMessageToChat('ai', triageReply || 'Sorry, I\'m having trouble connecting. Please try again later.');
+                return;
+            }
+        } catch (triageError) {
+            console.error('Fallback triage error:', triageError);
+        }
+
         addMessageToChat('ai', 'Sorry, I\'m having trouble connecting. Please try again later.');
     }
 }

@@ -53,17 +53,17 @@ You should see:
 ✓ Ollama AI Service is available
 ✓ medichat-llama3 model is ready
 🚀 Sanjeevni application started successfully!
-📡 Server running on http://localhost:3000
+📡 Server running on http://localhost:5050
 ```
 
 ## Access the Application
 
 ### Main Pages
-- **Homepage:** http://localhost:3000
-- **Signup:** http://localhost:3000/signup
-- **Login:** http://localhost:3000/login
-- **AI Assistant:** http://localhost:3000/ai-assistant.html
-- **User Registration:** http://localhost:3000/user-registration.html
+- **Homepage:** http://localhost:5050
+- **Signup:** http://localhost:5050/signup
+- **Login:** http://localhost:5050/login
+- **AI Assistant:** http://localhost:5050/ai-assistant.html
+- **User Registration:** http://localhost:5050/user-registration.html
 
 ### API Endpoints
 
@@ -88,7 +88,7 @@ You should see:
 
 ### Using the Web Interface
 
-1. Open: http://localhost:3000/ai-assistant.html
+1. Open: http://localhost:5050/ai-assistant.html
 2. Check the status indicator (should show "AI Service Available")
 3. Try each feature:
    - **Medical Triage:** Enter symptoms and get urgency assessment
@@ -101,7 +101,7 @@ You should see:
 
 **Check AI Status:**
 ```powershell
-Invoke-RestMethod -Uri "http://localhost:3000/api/ai/status" -Method GET
+Invoke-RestMethod -Uri "http://localhost:5050/api/ai/status" -Method GET
 ```
 
 **Medical Triage:**
@@ -116,7 +116,7 @@ $body = @{
     }
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "http://localhost:3000/api/ai/triage" -Method POST -Body $body -ContentType "application/json"
+Invoke-RestMethod -Uri "http://localhost:5050/api/ai/triage" -Method POST -Body $body -ContentType "application/json"
 ```
 
 **Symptom Analysis:**
@@ -129,7 +129,7 @@ $body = @{
     }
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "http://localhost:3000/api/ai/symptoms" -Method POST -Body $body -ContentType "application/json"
+Invoke-RestMethod -Uri "http://localhost:5050/api/ai/symptoms" -Method POST -Body $body -ContentType "application/json"
 ```
 
 **Health Advice:**
@@ -138,7 +138,7 @@ $body = @{
     query = "How to manage diabetes with diet?"
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri "http://localhost:3000/api/ai/advice" -Method POST -Body $body -ContentType "application/json"
+Invoke-RestMethod -Uri "http://localhost:5050/api/ai/advice" -Method POST -Body $body -ContentType "application/json"
 ```
 
 ## Troubleshooting
@@ -179,9 +179,9 @@ netstat -ano | findstr :27017
 
 ### Port Already in Use
 
-If port 3000 is in use, change it:
+If port 5050 is in use, change it:
 ```powershell
-$env:PORT=3001
+$env:PORT=5051
 npm start
 ```
 
