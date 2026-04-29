@@ -1,27 +1,21 @@
 # 🏥 Sanjeevni AI - Complete Healthcare Platform
 
-A modern, cross-platform healthcare application with Node.js backend and responsive web frontend.
+A modern healthcare workspace with a separate frontend app, separate backend service, and a separate Ollama integration area.
+
+## Repository Split
+
+- The root Next.js app should hold only UI code.
+- `backend/` should hold the Python Django + PostgreSQL service.
+- `ollama/` should hold Ollama-specific configuration, prompts, or service glue.
+- Backend/API code should not live inside the Next.js `app/api/` tree.
 
 ## 🎯 Project Structure
 
 ```
 SanjeevniAI/
-├── backend/                    # Node.js + Express API Server
-│   ├── server.js              # Backend API (Port 3000)
-│   ├── package.json
-│   ├── signatures/            # Saved signature files
-│   └── README.md
-├── frontend/                   # Node.js + Tailwind CSS Web App
-│   ├── server.js              # Frontend server (Port 8080)
-│   ├── public/
-│   │   ├── index.html         # Get Started page
-│   │   ├── roles.html         # Role selection
-│   │   ├── login.html         # Login/Register
-│   │   ├── form.html          # Professional details form with signature
-│   │   ├── dashboard.html     # Success dashboard
-│   │   └── js/
-│   │       └── signature.js   # Canvas signature capture
-│   └── package.json
+├── backend/                    # Python Django + PostgreSQL service
+├── app/                        # Root Next.js frontend
+├── ollama/                     # Ollama integration and model config
 └── WORKING_DEMO.md
 ```
 
@@ -37,10 +31,9 @@ SanjeevniAI/
 - ✅ **Loading States** - Visual feedback during submission
 
 ### Backend
-- ✅ **RESTful API** - POST endpoint for form submission
-- ✅ **Signature Storage** - Saves PNG files with metadata
-- ✅ **CORS Enabled** - Cross-origin requests supported
-- ✅ **JSON Metadata** - Stores form data alongside signatures
+- ✅ **Separate service boundary** - Keep API code out of the frontend tree
+- ✅ **PostgreSQL storage** - Use Django models and migrations for persisted data
+- ✅ **Ollama isolation** - Keep model config and prompts in their own folder
 
 ## 🚀 Quick Start
 
@@ -48,11 +41,10 @@ SanjeevniAI/
 
 ```powershell
 cd backend
-npm install
-node server.js
+python manage.py runserver
 ```
 
-✅ Backend running at: **http://localhost:3000**
+✅ Backend running at: **http://localhost:8000**
 
 ### 2. Start the Frontend Server
 
@@ -131,7 +123,7 @@ Navigate to: **http://localhost:8080**
 
 ### Backend Endpoint
 
-**POST** `http://localhost:3000/submit-form`
+**POST** `http://localhost:8000/api/submit-form/`
 
 **Request Body:**
 ```json
@@ -211,56 +203,48 @@ node test-submission.js
 ## 📂 Files Created
 
 ### Frontend
-- ✅ `frontend/server.js` - Express server
-- ✅ `frontend/public/index.html` - Get Started page
-- ✅ `frontend/public/roles.html` - Role selection
-- ✅ `frontend/public/login.html` - Login page
-- ✅ `frontend/public/form.html` - Professional form with signature
-- ✅ `frontend/public/dashboard.html` - Success dashboard
-- ✅ `frontend/public/js/signature.js` - Signature canvas logic
-- ✅ `frontend/package.json` - Dependencies
+- ✅ `app/` - Root Next.js frontend
 
 ### Backend
-- ✅ `backend/server.js` - API server
-- ✅ `backend/test-submission.js` - Test script
-- ✅ `backend/signatures/` - Storage folder
+- ✅ `backend/` - Separate backend service folder
+
+### Ollama
+- ✅ `ollama/` - Separate Ollama service folder
 
 ## 🔧 Configuration
 
 ### Change Ports
 
-**Backend** (default: 3000):
+**Backend** (default: 8000):
 ```javascript
-// backend/server.js
-const port = process.env.PORT || 3000;
+// backend/settings.py or backend/manage.py
+const port = process.env.PORT || 8000;
 ```
 
-**Frontend** (default: 8080):
+**Frontend** (default: 3000):
 ```javascript
-// frontend/server.js
-const PORT = process.env.PORT || 8080;
+// next dev / next start
+const PORT = process.env.PORT || 3000;
 ```
 
 ### Change Backend URL
 
-If backend runs on a different port/host:
-
-```javascript
-// frontend/public/form.html, line ~150
-fetch('http://localhost:3000/submit-form', {
-```
+If backend runs on a different port/host, point the frontend to the Django API base URL.
 
 ## 🚀 Deployment
 
 ### Deploy Backend
-- Use Heroku, Railway, Render, or AWS
-- Set environment variable: `PORT`
-- Update frontend API URL
+- Deploy the Django service separately from the frontend
+- Set your PostgreSQL connection variables in the backend environment
+- Point the frontend at the backend API base URL
+
+### Deploy Ollama
+- Keep Ollama config and local model wiring in `ollama/`
+- Run it as a separate local or containerized service
 
 ### Deploy Frontend
-- Use Vercel, Netlify, or Azure Static Web Apps
-- Build static files or deploy Node.js app
-- Update backend URL in `form.html`
+- Deploy the root Next.js app to Vercel or another Next.js host
+- Point the frontend at the Django API base URL
 
 ## 🔒 Security Considerations
 
@@ -278,14 +262,14 @@ For production:
 
 ## 📊 Features Comparison
 
-| Feature | iOS (Old) | Node.js (New) |
+| Feature | iOS (Old) | Split Web Stack |
 |---------|----------|---------------|
 | Platform | macOS/iOS only | ✅ Windows, Mac, Linux, Mobile |
 | Language | Swift | JavaScript |
 | UI Framework | SwiftUI | HTML + Tailwind CSS |
 | Signature | Canvas (Swift) | HTML5 Canvas |
-| Backend | Node.js | Node.js |
-| Database | None | File system (PNG + JSON) |
+| Backend | Node.js | Django + PostgreSQL |
+| Database | None | PostgreSQL |
 | Authentication | Demo | Demo |
 | Responsive | Fixed | ✅ Responsive |
 
@@ -302,20 +286,17 @@ For production:
 
 ## 📝 Notes
 
-- Frontend and backend run on different ports
+- Frontend, backend, and Ollama run as separate services
 - Backend must be running for form submission to work
-- Signatures are stored as base64-encoded PNG images
 - Demo mode: any email/password works for testing
-- All form data is stored in JSON files
-- macOS Swift/Xcode frontend has been removed
+- Keep API and model code out of the frontend tree
 
 ## 🎉 Summary
 
-✅ **Node.js + Tailwind CSS frontend created**  
-✅ **Same design pattern as iOS app**  
+✅ **Frontend separated from backend**  
+✅ **Django/PostgreSQL backend planned as a separate service**  
+✅ **Ollama isolated in its own folder**  
 ✅ **Windows compatible**  
 ✅ **Signature capture implemented**  
-✅ **Connected to backend API**  
-✅ **macOS frontend removed**  
 
 **The system is now fully operational on Windows!** 🚀
