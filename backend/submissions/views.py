@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Submission
+from .models import Appointment
 from .ollama_client import generate_summary
 
 
@@ -101,6 +102,34 @@ def list_submissions(request):
         for submission in Submission.objects.all()[:50]
     ]
     return JsonResponse({'ok': True, 'count': len(items), 'submissions': items})
+
+
+@csrf_exempt
+def book_appointment(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    payload = json.loads(request.body.decode('utf-8'))
+    doctor_name = payload.get('doctorName') or payload.get('doctor_name') or payload.get('doctor')
+    date = payload.get('date')
+    time = payload.get('time')
+
+    if not doctor_name or not date or not time:
+        return JsonResponse({'error': 'Missing required fields: doctorName, date, time'}, status=400)
+
+    appt = Appointment.objects.create(
+        doctor_name=doctor_name,
+        patient_name=payload.get('patientName') or payload.get('patient_name'),
+        patient_email=payload.get('patientEmail') or payload.get('patient_email'),
+        patient_phone=payload.get('patientPhone') or payload.get('patient_phone'),
+        appointment_type=payload.get('appointmentType') or payload.get('appointment_type') or 'physical',
+        hospital=payload.get('hospital'),
+        date=date,
+        time=time,
+        reason=payload.get('reason'),
+    )
+
+    return JsonResponse({'ok': True, 'appointmentId': appt.id, 'message': 'Appointment booked'})
 
 
 @csrf_exempt

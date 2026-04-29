@@ -37,3 +37,22 @@ class Submission(models.Model):
 
     def __str__(self) -> str:
         return f'{self.role or "Submission"} #{self.pk}'
+
+
+class Appointment(models.Model):
+    doctor_name = models.CharField(max_length=256)
+    patient_name = models.CharField(max_length=256, blank=True, null=True)
+    patient_email = models.EmailField(blank=True, null=True)
+    patient_phone = models.CharField(max_length=32, blank=True, null=True)
+    appointment_type = models.CharField(max_length=32, choices=(('physical','physical'),('virtual','virtual')), default='physical')
+    hospital = models.CharField(max_length=256, blank=True, null=True)
+    date = models.DateField()
+    time = models.CharField(max_length=32)
+    reason = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self) -> str:
+        return f'Appointment #{self.pk} with {self.doctor_name} on {self.date} {self.time}'
