@@ -195,28 +195,46 @@ export default function PatientSignupPage() {
     setIsLoading(true)
 
     try {
-      // Save registration data to localStorage
+      const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'
+
+      const res = await fetch(`${backendBaseUrl}/api/submit-form/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submissionData),
+      })
+
+      if (res.ok) {
+        const data = await res.json().catch(() => ({}))
+        alert(`✅ Patient Registration Submitted!\n\nReference: ${data.id || data.uniqueId || submissionData.registrationId}\nRedirecting to your dashboard...`)
+        localStorage.setItem('isLoggedIn', 'true')
+        localStorage.setItem('userEmail', formData.email)
+        localStorage.setItem('selectedRole', 'User')
+        setTimeout(() => router.push('/dashboard/patient'), 500)
+        return
+      }
+
+      // Fallback if backend returns error
       const existingRegistrations = localStorage.getItem('patientRegistrations')
       const registrations = existingRegistrations ? JSON.parse(existingRegistrations) : []
       registrations.push(submissionData)
       localStorage.setItem('patientRegistrations', JSON.stringify(registrations))
-
-      // Set user session
       localStorage.setItem('isLoggedIn', 'true')
       localStorage.setItem('userEmail', formData.email)
       localStorage.setItem('selectedRole', 'User')
-      
-      // Show success message
-      alert(`✅ Patient Registration Successful!\n\nRegistration ID: ${submissionData.registrationId}\nName: ${formData.firstName} ${formData.lastName}\nEmail: ${formData.email}\n\nRedirecting to your dashboard...`)
-      
-      // Redirect to patient dashboard
-      setTimeout(() => {
-        router.push('/dashboard/patient')
-      }, 500)
-      
+      alert('Registration saved locally (backend unavailable). You will be redirected to your dashboard.')
+      setTimeout(() => router.push('/dashboard/patient'), 500)
     } catch (error) {
-      alert('Error: Registration failed. Please try again.')
       console.error('Registration error:', error)
+      // Offline fallback
+      const existingRegistrations = localStorage.getItem('patientRegistrations')
+      const registrations = existingRegistrations ? JSON.parse(existingRegistrations) : []
+      registrations.push(submissionData)
+      localStorage.setItem('patientRegistrations', JSON.stringify(registrations))
+      localStorage.setItem('isLoggedIn', 'true')
+      localStorage.setItem('userEmail', formData.email)
+      localStorage.setItem('selectedRole', 'User')
+      alert('Registration saved locally (offline). You will be redirected to your dashboard.')
+      setTimeout(() => router.push('/dashboard/patient'), 500)
     } finally {
       setIsLoading(false)
     }

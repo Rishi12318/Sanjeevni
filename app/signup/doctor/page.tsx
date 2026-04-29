@@ -165,26 +165,45 @@ export default function DoctorSignupPage() {
     setIsLoading(true)
 
     try {
-      // Save registration data to localStorage
+      const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'
+
+      const res = await fetch(`${backendBaseUrl}/api/submit-form/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submissionData),
+      })
+
+      if (res.ok) {
+        const data = await res.json().catch(() => ({}))
+        alert(`✅ Doctor Registration Submitted!\n\nReference: ${data.id || data.uniqueId || submissionData.registrationId}\nStatus: Pending Verification\nRedirecting to your dashboard...`)
+        localStorage.setItem('isLoggedIn', 'true')
+        localStorage.setItem('userEmail', formData.email)
+        localStorage.setItem('selectedRole', 'Doctor')
+        setTimeout(() => router.push('/dashboard/doctor'), 500)
+        return
+      }
+
+      // Fallback to localStorage
       const existingRegistrations = localStorage.getItem('doctorRegistrations')
       const registrations = existingRegistrations ? JSON.parse(existingRegistrations) : []
       registrations.push(submissionData)
       localStorage.setItem('doctorRegistrations', JSON.stringify(registrations))
-
-      // Set user session
       localStorage.setItem('isLoggedIn', 'true')
       localStorage.setItem('userEmail', formData.email)
       localStorage.setItem('selectedRole', 'Doctor')
-      
-      alert(`✅ Doctor Registration Submitted Successfully!\n\nRegistration ID: ${submissionData.registrationId}\nName: Dr. ${formData.fullName}\nEmail: ${formData.email}\nStatus: Pending Verification\n\nOur team will review your credentials within 2-3 business days.\n\nRedirecting to your dashboard...`)
-      
-      setTimeout(() => {
-        router.push('/dashboard/doctor')
-      }, 500)
-      
+      alert('Registration saved locally (backend unavailable). Redirecting to your dashboard...')
+      setTimeout(() => router.push('/dashboard/doctor'), 500)
     } catch (error) {
-      alert('Error: Registration failed. Please try again.')
       console.error('Registration error:', error)
+      const existingRegistrations = localStorage.getItem('doctorRegistrations')
+      const registrations = existingRegistrations ? JSON.parse(existingRegistrations) : []
+      registrations.push(submissionData)
+      localStorage.setItem('doctorRegistrations', JSON.stringify(registrations))
+      localStorage.setItem('isLoggedIn', 'true')
+      localStorage.setItem('userEmail', formData.email)
+      localStorage.setItem('selectedRole', 'Doctor')
+      alert('Registration saved locally (offline). Redirecting to your dashboard...')
+      setTimeout(() => router.push('/dashboard/doctor'), 500)
     } finally {
       setIsLoading(false)
     }

@@ -279,24 +279,40 @@ function BookAppointmentContent() {
       return;
     }
 
-    // Show confirmation
-    const appointmentSummary = `
-Appointment Confirmed! 🎉
+    const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
-Doctor: ${selectedDoctor.name}
-Specialization: ${selectedDoctor.specialization}
-Type: ${appointmentType === 'physical' ? 'Physical Consultation' : 'Virtual Consultation'}
-${appointmentType === 'physical' && selectedHospital ? `Hospital: ${selectedHospital.name}` : ''}
-Date: ${new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-Time: ${selectedTime}
-Fee: ₹${appointmentType === 'physical' ? selectedDoctor.physicalFee : selectedDoctor.virtualFee}
-${reasonForVisit ? `\nReason: ${reasonForVisit}` : ''}
+    const payload = {
+      doctorName: selectedDoctor.name,
+      date: selectedDate,
+      time: selectedTime,
+      appointmentType: appointmentType,
+      hospital: selectedHospital?.name || '',
+      reason: reasonForVisit,
+    };
 
-You will receive a confirmation SMS and email shortly.
-    `;
+    (async () => {
+      try {
+        const res = await fetch(`${backendBaseUrl}/api/appointments/book/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
 
-    alert(appointmentSummary);
-    router.push('/dashboard/patient');
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          alert('Failed to book appointment: ' + (err.error || res.status));
+          return;
+        }
+
+        const data = await res.json();
+        alert(`Appointment confirmed! Reference: ${data.appointmentId || 'N/A'}`);
+        router.push('/dashboard/patient');
+      } catch (e) {
+        // fallback to local confirmation
+        alert('Appointment confirmed locally (offline).');
+        router.push('/dashboard/patient');
+      }
+    })();
   };
 
   return (

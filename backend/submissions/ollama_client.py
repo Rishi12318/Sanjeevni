@@ -1,10 +1,12 @@
 import json
+from urllib.error import URLError
 from urllib import request as urllib_request
 
 from django.conf import settings
 
 
 def generate_summary(prompt: str) -> str:
+    base_url = settings.OLLAMA_BASE_URL.rstrip('/')
     payload = json.dumps({
         'model': settings.OLLAMA_MODEL,
         'prompt': prompt,
@@ -12,14 +14,17 @@ def generate_summary(prompt: str) -> str:
     }).encode('utf-8')
 
     req = urllib_request.Request(
-        f'{settings.OLLAMA_BASE_URL}/api/generate',
+        f'{base_url}/api/generate',
         data=payload,
         headers={'Content-Type': 'application/json'},
         method='POST',
     )
 
-    with urllib_request.urlopen(req, timeout=30) as response:
-        data = json.loads(response.read().decode('utf-8'))
+    try:
+        with urllib_request.urlopen(req, timeout=30) as response:
+            data = json.loads(response.read().decode('utf-8'))
+    except URLError as exc:
+        raise RuntimeError(f'Ollama request failed for {base_url}: {exc}') from exc
 
     # Ollama responses may vary across versions; try common fields
     if isinstance(data, dict):

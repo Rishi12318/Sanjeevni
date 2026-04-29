@@ -169,23 +169,36 @@ export default function NGOSignupPage() {
     setIsLoading(true)
 
     try {
-      // Save registration data to localStorage
+      const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'
+
+      const res = await fetch(`${backendBaseUrl}/api/submit-form/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submissionData),
+      })
+
+      if (res.ok) {
+        const data = await res.json().catch(() => ({}))
+        alert(`✅ NGO Registration Submitted!\n\nReference: ${data.id || data.uniqueId || submissionData.registrationId}\nStatus: Pending Verification\nRedirecting to your dashboard...`)
+        localStorage.setItem('isLoggedIn', 'true')
+        localStorage.setItem('userEmail', formData.email)
+        localStorage.setItem('selectedRole', 'NGO')
+        setTimeout(() => router.push('/dashboard/ngo'), 500)
+        return
+      }
+
+      // Fallback to localStorage if backend error
       const existingRegistrations = localStorage.getItem('ngoRegistrations')
       const registrations = existingRegistrations ? JSON.parse(existingRegistrations) : []
       registrations.push(submissionData)
       localStorage.setItem('ngoRegistrations', JSON.stringify(registrations))
-
-      // Set user session
       localStorage.setItem('isLoggedIn', 'true')
       localStorage.setItem('userEmail', formData.email)
       localStorage.setItem('selectedRole', 'NGO')
-      
-      alert(`✅ NGO Registration Submitted Successfully!\n\nRegistration ID: ${submissionData.registrationId}\nOrganization: ${formData.organizationName}\nEmail: ${formData.email}\nStatus: Pending Verification\n\nOur team will review your documents within 2-3 business days.\n\nRedirecting to your dashboard...`)
-      
+      alert('Registration saved locally (backend unavailable). Redirecting to your dashboard...')
       setTimeout(() => {
         router.push('/dashboard/ngo')
       }, 500)
-      
     } catch (error) {
       alert('Error: Registration failed. Please try again.')
       console.error('Registration error:', error)

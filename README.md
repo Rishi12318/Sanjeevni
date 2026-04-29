@@ -238,9 +238,28 @@ If backend runs on a different port/host, point the frontend to the Django API b
 - Set your PostgreSQL connection variables in the backend environment
 - Point the frontend at the backend API base URL
 
+### Deploy Frontend on Vercel
+- Deploy the root Next.js app to Vercel
+- Add a Vercel environment variable:
+
+```bash
+NEXT_PUBLIC_BACKEND_URL=https://your-backend-domain.com
+```
+
+- Add the Vercel domain to `CORS_ALLOWED_ORIGINS` in the Django backend
+- Redeploy the frontend after changing environment variables
+
 ### Deploy Ollama
 - Keep Ollama config and local model wiring in `ollama/`
 - Run it as a separate local or containerized service
+- In production, use a reachable Ollama URL and set `OLLAMA_BASE_URL` in the backend environment
+- The frontend never talks to Ollama directly; it only talks to the backend
+
+### Recommended Production Split
+- Frontend: Vercel
+- Backend: Render, Railway, or another Python host
+- Ollama: Separate container, VM, or hosted Ollama endpoint
+- Database: Managed PostgreSQL
 
 ### Deploy Frontend
 - Deploy the root Next.js app to Vercel or another Next.js host
