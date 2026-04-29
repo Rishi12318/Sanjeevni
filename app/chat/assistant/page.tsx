@@ -135,30 +135,40 @@ export default function AIHealthAssistantPage() {
 
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
-      setMessages(prev => [...prev, getLocalBotResponse(userMessage)]);
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        text: `I couldn't reach the backend chat service at ${backendBaseUrl}. I can still help with quick medical guidance, but live Ollama responses are unavailable right now.`,
+        sender: 'bot',
+        timestamp: new Date(),
+        quickActions: ['Check Symptoms', 'Find Doctor', 'Book Appointment', 'Health Tips']
+      }]);
     } finally {
       setIsTyping(false);
     }
   };
 
   const handleSend = () => {
-    if (!input.trim()) return;
+    sendMessage(input);
+  };
+
+  const sendMessage = (messageText: string) => {
+    const trimmedMessage = messageText.trim();
+    if (!trimmedMessage) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: input,
+      text: trimmedMessage,
       sender: 'user',
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
     setInput('');
-    simulateBotResponse(input);
+    simulateBotResponse(trimmedMessage);
   };
 
   const handleQuickAction = (action: string) => {
-    setInput(action);
-    handleSend();
+    sendMessage(action);
   };
 
   const handleBookDoctor = (doctorName: string) => {
