@@ -6,6 +6,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from .models import Account
 from .models import Submission
 from .models import Appointment
 from .ollama_client import generate_summary
@@ -81,12 +82,79 @@ def submit_form(request):
         ollama_summary=ollama_summary,
     )
 
+    email = payload.get('email')
+    password = payload.get('password')
+    if email and password:
+        account_role = role or 'User'
+        if account_role == 'Patient':
+            account_role = 'User'
+        display_name = (
+            payload.get('fullName')
+            or payload.get('full_name')
+            or payload.get('organizationName')
+            or payload.get('organization_name')
+            or payload.get('firstName')
+            or payload.get('first_name')
+            or email
+        )
+        account, _ = Account.objects.get_or_create(email=email, defaults={'role': account_role, 'display_name': display_name})
+        account.role = account_role or account.role or 'User'
+        account.display_name = display_name
+        account.set_password(password)
+        account.save()
+
     return JsonResponse({
         'ok': True,
         'id': submission.id,
         'file': filename,
         'uniqueId': unique_id,
         'ollamaSummary': ollama_summary,
+    })
+
+
+@csrf_exempt
+def login(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    payload = json.loads(request.body.decode('utf-8'))
+    email = (payload.get('email') or '').strip().lower()
+    password = payload.get('password') or ''
+    role = (payload.get('role') or 'User').strip()
+
+    if not email or not password:
+        return JsonResponse({'error': 'Email and password are required'}, status=400)
+
+    try:
+        account = Account.objects.get(email=email)
+    except Account.DoesNotExist:
+        return JsonResponse({'error': 'Invalid email or password'}, status=401)
+
+    normalized_role = account.role
+    if normalized_role == 'Patient':
+        normalized_role = 'User'
+    requested_role = role
+    if requested_role == 'Patient':
+        requested_role = 'User'
+
+    if requested_role and normalized_role and normalized_role != requested_role:
+        return JsonResponse({'error': f'Account is registered as {account.role}, not {role}'}, status=403)
+
+    if not account.check_password(password):
+        return JsonResponse({'error': 'Invalid email or password'}, status=401)
+
+    dashboard_path = '/dashboard/patient'
+    if normalized_role == 'Doctor':
+        dashboard_path = '/dashboard/doctor'
+    elif normalized_role == 'NGO':
+        dashboard_path = '/dashboard/ngo'
+
+    return JsonResponse({
+        'ok': True,
+        'email': account.email,
+        'role': normalized_role,
+        'dashboardPath': dashboard_path,
+        'displayName': account.display_name,
     })
 
 

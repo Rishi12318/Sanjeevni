@@ -22,6 +22,8 @@ export default function NGOSignupPage() {
     fcraRegistration: '',
     registeredOfficeAddress: '',
     email: '',
+    password: '',
+    confirmPassword: '',
     phone: '',
     websiteUrl: '',
     authorizedPersonName: '',
@@ -107,8 +109,12 @@ export default function NGOSignupPage() {
 
   const validateCurrentStep = () => {
     if (currentStep === 1) {
-      if (!formData.organizationName || !formData.ngoRegistrationNumber || !formData.ngoType || !formData.dateOfEstablishment || !formData.missionStatement || !formData.panCard) {
+      if (!formData.organizationName || !formData.ngoRegistrationNumber || !formData.ngoType || !formData.dateOfEstablishment || !formData.missionStatement || !formData.panCard || !formData.password || !formData.confirmPassword) {
         alert('Please fill in all required fields in Organization Details')
+        return false
+      }
+      if (formData.password !== formData.confirmPassword) {
+        alert('Passwords do not match')
         return false
       }
     } else if (currentStep === 2) {
@@ -289,6 +295,16 @@ export default function NGOSignupPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">PAN Card Number *</label>
                     <input type="text" id="panCard" required value={formData.panCard} onChange={handleChange} placeholder="ABCDE1234F" maxLength={10} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none transition-colors" />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Password *</label>
+                      <input type="password" id="password" required value={formData.password} onChange={handleChange} placeholder="Create a password" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none transition-colors" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password *</label>
+                      <input type="password" id="confirmPassword" required value={formData.confirmPassword} onChange={handleChange} placeholder="Re-enter your password" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none transition-colors" />
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">FCRA Registration (if applicable)</label>

@@ -15,6 +15,8 @@ export default function DoctorSignupPage() {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    password: '',
+    confirmPassword: '',
     phone: '',
     medicalLicenseNumber: '',
     medicalCouncilRegistration: '',
@@ -108,8 +110,12 @@ export default function DoctorSignupPage() {
 
   const validateCurrentStep = () => {
     if (currentStep === 1) {
-      if (!formData.fullName || !formData.email || !formData.phone || !formData.medicalLicenseNumber || !formData.medicalCouncilRegistration || !formData.specialization || !formData.medicalDegree || !formData.yearsOfExperience) {
+      if (!formData.fullName || !formData.email || !formData.password || !formData.confirmPassword || !formData.phone || !formData.medicalLicenseNumber || !formData.medicalCouncilRegistration || !formData.specialization || !formData.medicalDegree || !formData.yearsOfExperience) {
         alert('Please fill in all required fields in Professional Information')
+        return false
+      }
+      if (formData.password !== formData.confirmPassword) {
+        alert('Passwords do not match')
         return false
       }
     } else if (currentStep === 2) {
@@ -266,6 +272,14 @@ export default function DoctorSignupPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
                     <input type="email" id="email" required value={formData.email} onChange={handleChange} placeholder="doctor@hospital.com" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Password *</label>
+                    <input type="password" id="password" required value={formData.password} onChange={handleChange} placeholder="Create a password" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Confirm Password *</label>
+                    <input type="password" id="confirmPassword" required value={formData.confirmPassword} onChange={handleChange} placeholder="Re-enter your password" className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>

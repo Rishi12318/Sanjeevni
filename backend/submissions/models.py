@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.hashers import check_password, make_password
 
 
 class Submission(models.Model):
@@ -37,6 +38,26 @@ class Submission(models.Model):
 
     def __str__(self) -> str:
         return f'{self.role or "Submission"} #{self.pk}'
+
+
+class Account(models.Model):
+    role = models.CharField(max_length=32)
+    email = models.EmailField(unique=True)
+    password_hash = models.CharField(max_length=256)
+    display_name = models.CharField(max_length=256, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def set_password(self, raw_password: str) -> None:
+        self.password_hash = make_password(raw_password)
+
+    def check_password(self, raw_password: str) -> bool:
+        return check_password(raw_password, self.password_hash)
+
+    def __str__(self) -> str:
+        return f'{self.email} ({self.role})'
 
 
 class Appointment(models.Model):

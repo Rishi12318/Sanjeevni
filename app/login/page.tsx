@@ -8,6 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [role, setRole] = useState('User')
+  const [errorMessage, setErrorMessage] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -17,26 +18,35 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Simple validation and redirect
-    if (email && password) {
+    setErrorMessage('')
+
+    if (!email || !password) {
+      setErrorMessage('Please enter both email and password.')
+      return
+    }
+
+    try {
+      const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'
+      const response = await fetch(`${backendBaseUrl}/api/login/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role }),
+      })
+
+      const data = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        setErrorMessage(data.error || 'Invalid email or password.')
+        return
+      }
+
       localStorage.setItem('isLoggedIn', 'true')
-      localStorage.setItem('userEmail', email)
-      
-      // Get or set default role
-      let savedRole = localStorage.getItem('selectedRole')
-      if (!savedRole) {
-        savedRole = 'User'
-        localStorage.setItem('selectedRole', 'User')
-      }
-      
-      // Redirect based on role
-      if (savedRole === 'Doctor') {
-        router.push('/dashboard/doctor')
-      } else if (savedRole === 'NGO') {
-        router.push('/dashboard/ngo')
-      } else {
-        router.push('/dashboard/patient')
-      }
+      localStorage.setItem('userEmail', data.email || email)
+      localStorage.setItem('selectedRole', data.role || role || 'User')
+
+      router.push(data.dashboardPath || '/dashboard/patient')
+    } catch (error) {
+      setErrorMessage('Unable to reach the backend login service. Please try again later.')
     }
   }
 
@@ -136,6 +146,12 @@ export default function LoginPage() {
               <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
             </svg>
           </button>
+
+          {errorMessage && (
+            <p className="text-sm text-red-600 text-center bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+              {errorMessage}
+            </p>
+          )}
         </form>
 
         <div className="mt-6 text-center">
