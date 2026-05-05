@@ -22,7 +22,7 @@ export default function AIHealthAssistantPage() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -112,7 +112,7 @@ export default function AIHealthAssistantPage() {
     setIsTyping(true);
     
     try {
-      const response = await fetch(`${backendBaseUrl}/api/chat/`, {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -137,7 +137,7 @@ export default function AIHealthAssistantPage() {
     } catch (error) {
       setMessages(prev => [...prev, {
         id: Date.now().toString(),
-        text: `I couldn't reach the backend chat service at ${backendBaseUrl}. I can still help with quick medical guidance, but live Ollama responses are unavailable right now.`,
+        text: `I couldn't reach the AI service. I can still help with quick medical guidance, but live Ollama responses are unavailable right now.`,
         sender: 'bot',
         timestamp: new Date(),
         quickActions: ['Check Symptoms', 'Find Doctor', 'Book Appointment', 'Health Tips']

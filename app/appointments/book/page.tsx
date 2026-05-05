@@ -279,8 +279,6 @@ function BookAppointmentContent() {
       return;
     }
 
-    const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
-
     const payload = {
       doctorName: selectedDoctor.name,
       date: selectedDate,
@@ -292,7 +290,7 @@ function BookAppointmentContent() {
 
     (async () => {
       try {
-        const res = await fetch(`${backendBaseUrl}/api/appointments/book/`, {
+        const res = await fetch('/api/appointments/book', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),

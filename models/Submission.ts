@@ -1,17 +1,92 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema, Document } from 'mongoose'
 
-const submissionSchema = new mongoose.Schema({
+export interface ISubmission extends Document {
+  role?: string
+  email?: string
+  phone?: string
+  address?: string
+  city?: string
+  state?: string
+  zipCode?: string
+
+  // Patient
+  firstName?: string
+  lastName?: string
+  dateOfBirth?: Date
+  gender?: string
+  bloodGroup?: string
+  emergencyContactName?: string
+  emergencyContactRelation?: string
+  emergencyContactPhone?: string
+  medicalConditions?: string
+  currentMedications?: string
+  allergies?: string
+  previousSurgeries?: string
+  insuranceProvider?: string
+  insurancePolicyNumber?: string
+  insuranceGroupId?: string
+  preferredPaymentMethod?: string
+
+  // Doctor
+  fullName?: string
+  licenseNumber?: string
+  specialization?: string
+  yearsOfExperience?: number
+  medicalSchool?: string
+  graduationYear?: number
+  boardCertifications?: string
+  hospitalAffiliations?: string
+  clinicAddress?: string
+  consultationFee?: number
+  availableDays?: string[]
+  availableTimeSlots?: string
+  languagesSpoken?: string[]
+  telemedicineAvailable?: boolean
+  acceptsInsurance?: boolean
+  insuranceNetworks?: string
+
+  // NGO
+  organizationName?: string
+  registrationNumber?: string
+  establishedDate?: Date
+  mission?: string
+  websiteUrl?: string
+  contactPersonName?: string
+  contactPersonDesignation?: string
+  areasOfOperation?: string[]
+  servicesOffered?: string
+  targetBeneficiaries?: string
+  annualBudget?: string
+  fundingSources?: string
+  numberOfVolunteers?: number
+  numberOfStaff?: number
+  previousHealthcareProjects?: string
+  partnershipsCollaborations?: string
+
+  // Metadata
+  signatureFilename?: string
+  signatureBase64?: string
+  uniqueId?: string
+  ollamaSummary?: string
+  submittedAt: Date
+  status: string
+
+  // Legacy q fields
+  q1?: string
+  q2?: string
+  q3?: string
+  q4?: string
+}
+
+const submissionSchema = new Schema<ISubmission>({
   role: String,
-  
-  // Common fields
   email: String,
   phone: String,
   address: String,
   city: String,
   state: String,
   zipCode: String,
-  
-  // Patient-specific fields
+
   firstName: String,
   lastName: String,
   dateOfBirth: Date,
@@ -28,8 +103,7 @@ const submissionSchema = new mongoose.Schema({
   insurancePolicyNumber: String,
   insuranceGroupId: String,
   preferredPaymentMethod: String,
-  
-  // Doctor-specific fields
+
   fullName: String,
   licenseNumber: String,
   specialization: String,
@@ -46,8 +120,7 @@ const submissionSchema = new mongoose.Schema({
   telemedicineAvailable: Boolean,
   acceptsInsurance: Boolean,
   insuranceNetworks: String,
-  
-  // NGO-specific fields
+
   organizationName: String,
   registrationNumber: String,
   establishedDate: Date,
@@ -64,13 +137,18 @@ const submissionSchema = new mongoose.Schema({
   numberOfStaff: Number,
   previousHealthcareProjects: String,
   partnershipsCollaborations: String,
-  
-  // Common submission metadata
+
   signatureFilename: String,
   signatureBase64: String,
   uniqueId: String,
+  ollamaSummary: String,
   submittedAt: { type: Date, default: Date.now },
-  status: { type: String, default: 'pending' }
+  status: { type: String, default: 'pending' },
+
+  q1: String,
+  q2: String,
+  q3: String,
+  q4: String,
 })
 
-export default mongoose.models.Submission || mongoose.model('Submission', submissionSchema)
+export default mongoose.models.Submission || mongoose.model<ISubmission>('Submission', submissionSchema)

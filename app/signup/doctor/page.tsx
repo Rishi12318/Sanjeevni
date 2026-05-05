@@ -171,9 +171,7 @@ export default function DoctorSignupPage() {
     setIsLoading(true)
 
     try {
-      const backendBaseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'
-
-      const res = await fetch(`${backendBaseUrl}/api/submit-form/`, {
+      const res = await fetch('/api/submit-form', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(submissionData),
