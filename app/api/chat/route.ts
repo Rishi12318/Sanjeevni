@@ -15,7 +15,7 @@ async function callOllama(prompt: string): Promise<string> {
       stream: false,
     }),
     // Abort after 30 s to avoid Vercel function timeout
-    signal: AbortSignal.timeout(30_000),
+    signal: AbortSignal.timeout(120_000),
   })
 
   if (!response.ok) {
